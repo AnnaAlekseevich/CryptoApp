@@ -4,8 +4,12 @@ buildscript {
     ext.retrofit_version = '2.6.1'
     ext.retrofit_version = '2.6.1'
     repositories {
-        google()
         mavenCentral()
+        google()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.1"
@@ -18,9 +22,13 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+        google()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
+
     }
 }
 

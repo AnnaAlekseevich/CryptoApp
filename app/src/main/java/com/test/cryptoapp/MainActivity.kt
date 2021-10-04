@@ -2,6 +2,7 @@ package com.test.cryptoapp
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveData(){
         //todo create saving data to DB
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
     }
 
 }

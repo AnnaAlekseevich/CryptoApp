@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -67,4 +68,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'jp.wasabeef:glide-transformations:4.1.0'
     implementation 'jp.co.cyberagent.android:gpuimage:2.0.0'
+
+    //runtime permissions
+    implementation 'com.github.tajchert:nammu:1.2.0'
+
 }

@@ -6,7 +6,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/profile_icon"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -32,6 +32,7 @@
             android:background="@color/gray_background_color" />
 
         <ImageView
+            android:id="@+id/iconPhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,6 +48,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center_vertical"
+        android:maxLength="20"
+        android:minLines="1"
         android:hint="@string/first_name"
         android:minHeight="56dp"
         android:padding="16dp"
