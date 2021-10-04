@@ -1,8 +1,8 @@
 package com.test.cryptoapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -14,7 +14,6 @@ import com.test.cryptoapp.fragments.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -28,6 +27,20 @@ class MainActivity : AppCompatActivity() {
         })
 
         updateToolbar(0)
+
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.sort_popup_menu -> {
+                    showSortPopupMenu()
+                }
+                R.id.save -> {
+                    saveData()
+                }
+            }
+
+            return@setOnMenuItemClickListener true
+        }
+
         setContentView(binding.root)
     }
 
@@ -70,4 +83,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showSortPopupMenu() {
+        // setup the alert builder
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Sort")
+
+// add a radio button list
+        val sort = arrayOf(getResources().getString(R.string.by_price), getResources().getString(R.string.alphabetically))
+        val checkedItem = 1 // by_price
+        builder.setSingleChoiceItems(sort, checkedItem) { dialog, which ->
+            // user checked an item
+        }
+
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK") { dialog, which ->
+            // user clicked OK
+        }
+        builder.setNegativeButton("Cancel", null)
+
+// create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun saveData(){
+        //todo create saving data to DB
+    }
+
 }

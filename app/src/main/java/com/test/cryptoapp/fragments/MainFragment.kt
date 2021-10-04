@@ -24,6 +24,7 @@ class MainFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(layoutInflater)
+        binding.cryptosRecyclerView
         return binding.root
     }
 

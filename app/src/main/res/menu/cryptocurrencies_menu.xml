@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/view_search"
+    <item android:id="@+id/sort_popup_menu"
         android:title="Headline"
         android:icon="@drawable/ic_menu"
         app:showAsAction="always"/>

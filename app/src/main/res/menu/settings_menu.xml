@@ -5,8 +5,8 @@
     \
 
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/save"
         app:showAsAction="always"
-        android:icon="@drawable/settings_icon"
+        android:icon="@drawable/save_icon"
         android:title="@string/settings"/>
 </menu>

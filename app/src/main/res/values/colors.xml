@@ -14,5 +14,11 @@
     <color name="UFO_green">#2ED25C</color>
     <color name="spanish_gray">#979797</color>
     <color name="transparent_white">#AAFFFFFF</color>
+    <color name="text_gray">#57000000</color>
+    <color name="dark_jungle_gray">#14212121</color>
+    <color name="silver_sand">#C4C4C4</color>
+    <color name="gray_background_color">#33000000</color>
+
+
 
 </resources>
