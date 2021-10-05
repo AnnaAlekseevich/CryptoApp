@@ -46,10 +46,12 @@ import com.test.cryptoapp.models.Coin
             binding.titleCoinName.text = coin.getName()
             binding.subTitleSymbolName.text = coin.getcryptoSymbol()
             binding.priceCoin.text = coin.getcurrentPriceCoin().toString()
-            Glide
-                .with(binding.imageView.context)
-                .load(binding.imageView.setImageURI(coin.urlItemCrypto?.toUri()))
-                .into(binding.imageView)
+            coin.urlItemCrypto?.toUri()?.let {
+                Glide
+                    .with(binding.imageView.context)
+                    .load(it)
+                    .into(binding.imageView)
+            }
             binding.clItem.setOnClickListener {
                 coinListItemClickListener.onCoinClicked(coin)
             }

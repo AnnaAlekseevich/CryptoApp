@@ -74,5 +74,35 @@
     <style name="CustomTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
     </style>
+    <style  name="CryptoActivityTitlePrice">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style  name="CryptoActivityStartEndPrice">
+        <item name="android:textColor">@color/old_silver</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style  name="CryptoActivityPointsTime">
+        <item name="android:textColor">@color/silver_sand</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style  name="CryptoActivityMarketCap">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style  name="CryptoActivityMarketPrice">
+        <item name="android:textColor">@color/UFO_green</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+    <style  name="CryptoActivityMarketPricePercent">
+        <item name="android:textColor">@color/UFO_green</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

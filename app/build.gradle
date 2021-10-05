@@ -78,4 +78,7 @@ dependencies {
 
     //chart library
     implementation 'com.tradingview:lightweightcharts:3.6.1'
+
+    //for picker
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
 }

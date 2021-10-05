@@ -2,6 +2,7 @@ package com.test.cryptoapp.fragments
 
 import android.Manifest
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +15,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialTextInputPicker
 import com.test.cryptoapp.BuildConfig
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSettingsBinding
@@ -23,19 +23,13 @@ import pl.tajchert.nammu.PermissionCallback
 import java.io.File
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
-    private var currentSelectedDate: Long? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentSettingsBinding.inflate(layoutInflater)
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +42,7 @@ class SettingsFragment : Fragment() {
             showPopupPhoto()
         }
         binding.birthDay.setOnClickListener {
-            //showInputPicker()
+            showInputPicker()
         }
 
         Nammu.init(requireContext())
@@ -116,8 +110,6 @@ class SettingsFragment : Fragment() {
                 .with(binding.imageProfile.context)
                 .load(it)
                 .into(binding.imageProfile)
-            binding.iconPhoto.visibility = View.GONE
-            binding.addPhoto.visibility = View.GONE
         }
     }
 
@@ -181,27 +173,37 @@ class SettingsFragment : Fragment() {
         )
     }
 
-//    private fun showInputPicker() {
-//
-//    }
+    private fun showInputPicker() {
+        val builder: MaterialDatePicker.Builder<Long> =
+            MaterialDatePicker.Builder.datePicker()
+        builder.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+        builder.setTitleText(resources.getString(R.string.media_data_picker_date_of_birth))
+        val picker: MaterialDatePicker<*> = builder.build()
+        picker.show(childFragmentManager, picker.toString())
+        picker.addOnNegativeButtonClickListener {
+            Toast.makeText(context,"Cancel", Toast.LENGTH_SHORT).show()
+        }
+        picker.addOnPositiveButtonClickListener {
 
-//    private fun showDataPicker(){
-//        val selectedDateInMillis = currentSelectedDate ?: System.currentTimeMillis()
-//
-//        MaterialDatePicker.Builder.datePicker().setSelection(selectedDateInMillis).build().apply {
-//            addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
-//        }.show(supportFragmentManager, MaterialDatePicker::class.java.canonicalName)
-//    }
-//
-//    private fun onDateSelected(dateTimeStampInMillis: Long) {
-//        currentSelectedDate = dateTimeStampInMillis
-//        val dateTime: LocalDateTime = LocalDateTime.ofInstant(
-//            Instant.ofEpochMilli(currentSelectedDate),
-//            ZoneId.systemDefault()
-//        )
-//        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//        findViewById<TextView>(R.id.output).text = dateAsFormattedText
-//    }
+            val date = it //  single select date
+            onDateSelected(date as Long)
+
+        }
+    }
+
+    private fun onDateSelected(dateTimeStampInMillis: Long) {
+        var currentSelectedDate = dateTimeStampInMillis
+        var dateTime: LocalDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(currentSelectedDate),
+                ZoneId.systemDefault()
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        var dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        binding.birthDay.setText(dateAsFormattedText)
+    }
 
 }
 

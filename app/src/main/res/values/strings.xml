@@ -23,4 +23,14 @@
     <string name="take_a_photo">Take a photo</string>
     <string name="take_photo_from_camera">Camera</string>
     <string name="take_photo_from_files">Files</string>
+    <string name="media_data_picker_enter_date">Enter date</string>
+    <string name="media_data_picker_date_of_birth">DATE OF BIRTH</string>
+    <string name="point_24H">24H</string>
+    <string name="point_1W">1W</string>
+    <string name="point_1M">1M</string>
+    <string name="point_1Y">1Y</string>
+    <string name="point_ALL">All</string>
+    <string name="market_cap">Market cap</string>
+    <string name="market_cap_price">$999.99B</string>
+    <string name="market_cap_price_percent">+999.99 %</string>
 </resources>

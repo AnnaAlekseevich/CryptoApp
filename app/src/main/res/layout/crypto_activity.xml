@@ -16,13 +16,160 @@
         android:background="@color/UFO_green"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/titlePrice"
+        style="@style/CryptoActivityTitlePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="999999 $"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarCrypto" />
+
+    <TextView
+        android:id="@+id/marketPrice"
+        style="@style/CryptoActivityMarketPricePercent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/market_cap_price_percent"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titlePrice" />
+
+    <TextView
+        android:id="@+id/endPrice"
+        style="@style/CryptoActivityStartEndPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="80000$"
+        android:gravity="end"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titlePrice" />
 
     <com.tradingview.lightweightcharts.view.ChartsView
         android:id="@+id/livechart"
+        android:layout_width="match_parent"
+        android:layout_height="132dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/startPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbarCrypto"
+        app:layout_constraintTop_toBottomOf="@id/titlePrice" />
+
+    <TextView
+        android:id="@+id/startPrice"
+        style="@style/CryptoActivityStartEndPrice"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="wrap_content"
+        android:text="5000$"
+        android:gravity="start"
+        android:layout_marginTop="112dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/endPrice" />
+
+    <LinearLayout
+        android:id="@+id/LRTimeForChoice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startPrice"
+        android:dividerPadding="20dp"
+        android:showDividers="middle">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/point_24H"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/background_time_chart"
+            style="@style/CryptoActivityPointsTime"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/point_1W"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/CryptoActivityPointsTime" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/point_1M"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/CryptoActivityPointsTime"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/point_1Y"
+            style="@style/CryptoActivityPointsTime"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/point_ALL"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/CryptoActivityPointsTime"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LRTimeForChoice"
+        android:background="@color/silver_sand" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineView">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/market_cap"
+            style="@style/CryptoActivityMarketCap"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/market_cap_price"
+            android:layout_weight="1"
+            android:gravity="right"
+            style="@style/CryptoActivityMarketPrice"/>
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
