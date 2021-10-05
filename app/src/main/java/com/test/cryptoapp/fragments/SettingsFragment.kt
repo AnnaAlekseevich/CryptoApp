@@ -13,19 +13,27 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialTextInputPicker
 import com.test.cryptoapp.BuildConfig
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSettingsBinding
 import pl.tajchert.nammu.Nammu
 import pl.tajchert.nammu.PermissionCallback
 import java.io.File
+import java.time.Instant
+import java.time.LocalDateTime
 
 
 class SettingsFragment : Fragment() {
+
     private lateinit var binding: FragmentSettingsBinding
+    private var currentSelectedDate: Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentSettingsBinding.inflate(layoutInflater)
+
 
     }
 
@@ -38,6 +46,9 @@ class SettingsFragment : Fragment() {
         binding.imageProfile.setOnClickListener {
             Log.d("AddPhoto", "binding.imageProfile.setOnClickListener")
             showPopupPhoto()
+        }
+        binding.birthDay.setOnClickListener {
+            //showInputPicker()
         }
 
         Nammu.init(requireContext())
@@ -169,6 +180,28 @@ class SettingsFragment : Fragment() {
             tmpFile
         )
     }
+
+//    private fun showInputPicker() {
+//
+//    }
+
+//    private fun showDataPicker(){
+//        val selectedDateInMillis = currentSelectedDate ?: System.currentTimeMillis()
+//
+//        MaterialDatePicker.Builder.datePicker().setSelection(selectedDateInMillis).build().apply {
+//            addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
+//        }.show(supportFragmentManager, MaterialDatePicker::class.java.canonicalName)
+//    }
+//
+//    private fun onDateSelected(dateTimeStampInMillis: Long) {
+//        currentSelectedDate = dateTimeStampInMillis
+//        val dateTime: LocalDateTime = LocalDateTime.ofInstant(
+//            Instant.ofEpochMilli(currentSelectedDate),
+//            ZoneId.systemDefault()
+//        )
+//        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//        findViewById<TextView>(R.id.output).text = dateAsFormattedText
+//    }
 
 }
 
