@@ -10,10 +10,11 @@ import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.models.Coin
 
-class CryptoResultAdapter :
+ class CryptoResultAdapter(open val coinListItemClickListener: CoinListItemClickListener) :
     RecyclerView.Adapter<CryptoResultAdapter.CryptoViewHolder>() {
 
     private val data = mutableListOf<Coin>()
+
 
     fun addCoins( coins : List<Coin>){
         data.addAll(coins)
@@ -36,7 +37,7 @@ class CryptoResultAdapter :
         return data.size
     }
 
-    class CryptoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+     inner class CryptoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val binding = ItemListCryptoBinding.bind(view)
 
@@ -49,6 +50,9 @@ class CryptoResultAdapter :
                 .with(binding.imageView.context)
                 .load(binding.imageView.setImageURI(coin.urlItemCrypto?.toUri()))
                 .into(binding.imageView)
+            binding.clItem.setOnClickListener {
+                coinListItemClickListener.onCoinClicked(coin)
+            }
         }
 
     }

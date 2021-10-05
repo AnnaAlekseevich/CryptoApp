@@ -1,16 +1,19 @@
 package com.test.cryptoapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.test.cryptoapp.crypto.CoinListItemClickListener
+import com.test.cryptoapp.crypto.CryptoActivity
 import com.test.cryptoapp.crypto.CryptoResultAdapter
 import com.test.cryptoapp.databinding.FragmentMainBinding
 import com.test.cryptoapp.models.Coin
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), CoinListItemClickListener {
     private lateinit var binding: FragmentMainBinding
     private var coinsAdapter: CryptoResultAdapter? = null
 
@@ -21,15 +24,11 @@ class MainFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(layoutInflater)
-        coinsAdapter = CryptoResultAdapter()
+        coinsAdapter = CryptoResultAdapter(this)
         binding.cryptosRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.cryptosRecyclerView.adapter = coinsAdapter
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
         addCoins(generateSubData())
+        return binding.root
     }
 
     private fun generateSubData():List<Coin> {
@@ -61,6 +60,11 @@ class MainFragment : Fragment() {
 
     private fun addCoins(coins:List<Coin>){
         coinsAdapter?.addCoins(coins)
+    }
+
+    override fun onCoinClicked(coin: Coin?) {
+        val intent = Intent(context, CryptoActivity::class.java)
+        startActivity(intent)
     }
 
 
