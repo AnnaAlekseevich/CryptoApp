@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.test.cryptoapp.MainActivity
 import com.test.cryptoapp.R
@@ -43,6 +44,10 @@ class CryptoActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun changeProgressBarVisibility(show: Boolean) {
+        binding.progressBar.setVisibility(if (show) View.VISIBLE else View.GONE)
     }
 
 }

@@ -2,6 +2,7 @@ package com.test.cryptoapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import com.test.cryptoapp.models.Coin
 class MainFragment : Fragment(), CoinListItemClickListener {
     private lateinit var binding: FragmentMainBinding
     private var coinsAdapter: CryptoResultAdapter? = null
-
+    private lateinit var handler: Handler
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +28,23 @@ class MainFragment : Fragment(), CoinListItemClickListener {
         coinsAdapter = CryptoResultAdapter(this)
         binding.cryptosRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.cryptosRecyclerView.adapter = coinsAdapter
+        handler = Handler()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = true
+            loadCoinsData()
+            showCoinsData()
+            // Initialize a new Runnable
+            val runnable = Runnable {
+
+                // Hide swipe to refresh icon animation
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+
+            // Execute the task after specified time
+            handler.postDelayed(
+                runnable, 3000.toLong()
+            )
+        }
         addCoins(generateSubData())
         return binding.root
     }
@@ -67,5 +85,16 @@ class MainFragment : Fragment(), CoinListItemClickListener {
         startActivity(intent)
     }
 
+    private fun loadCoinsData(){
+
+    }
+
+    private fun showCoinsData(){
+
+    }
+
+    private fun changeProgressBarVisibility(show: Boolean) {
+        binding.progressBar.setVisibility(if (show) View.VISIBLE else View.GONE)
+    }
 
 }

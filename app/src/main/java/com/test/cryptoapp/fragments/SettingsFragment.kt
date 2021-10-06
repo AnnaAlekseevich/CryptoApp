@@ -84,7 +84,6 @@ class SettingsFragment : Fragment() {
                     openCameraForCreatingPhoto()
                 }
                 1 -> { /* gallery   */
-                    Log.d("AddPhoto", "onPictureClicked()")
                     onPictureClicked()
                 }
             }

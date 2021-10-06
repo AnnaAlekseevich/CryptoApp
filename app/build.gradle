@@ -81,4 +81,7 @@ dependencies {
 
     //for picker
     implementation 'com.google.android.material:material:1.2.0-alpha04'
+
+    //for paging
+    implementation("androidx.paging:paging-runtime:2.1.2")
 }
