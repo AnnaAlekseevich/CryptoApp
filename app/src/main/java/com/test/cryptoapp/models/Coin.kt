@@ -1,6 +1,5 @@
 package com.test.cryptoapp.models
 
-import android.net.Uri
 import com.google.gson.annotations.SerializedName
 
 data class Coin(
@@ -22,7 +21,7 @@ data class Coin(
 
     //текущая цена coin
     @SerializedName("current_price")
-    var currentPriceCoin: Double?,
+    var currentPriceCoin: Double?
 
 //    //priceMarketCap coin
 //    @SerializedName("market_cap")

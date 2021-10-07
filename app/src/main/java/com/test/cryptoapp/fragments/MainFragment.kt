@@ -2,22 +2,29 @@ package com.test.cryptoapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.crypto.CoinListItemClickListener
+import com.test.cryptoapp.crypto.CoinsListAdapter
 import com.test.cryptoapp.crypto.CryptoActivity
-import com.test.cryptoapp.crypto.CryptoResultAdapter
 import com.test.cryptoapp.databinding.FragmentMainBinding
+import com.test.cryptoapp.factory.MainFragmentViewModelFactory
 import com.test.cryptoapp.models.Coin
+import com.test.cryptoapp.net.Api
+import kotlinx.coroutines.flow.collectLatest
 
 class MainFragment : Fragment(), CoinListItemClickListener {
     private lateinit var binding: FragmentMainBinding
-    private var coinsAdapter: CryptoResultAdapter? = null
-    private lateinit var handler: Handler
+    private lateinit var mainFragmentViewModel: MainFragmentViewModel
+
+    private var coinsAdapter: CoinsListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,59 +32,28 @@ class MainFragment : Fragment(), CoinListItemClickListener {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(layoutInflater)
-        coinsAdapter = CryptoResultAdapter(this)
-        binding.cryptosRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.cryptosRecyclerView.adapter = coinsAdapter
-        handler = Handler()
+        coinsAdapter = CoinsListAdapter(this)
+
+        setupViewModel()
+        setupList()
+        Log.d("ListCoinsFromAPI", " " + setupList())
+        setupView()
+
         binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.swipeRefreshLayout.isRefreshing = true
-            loadCoinsData()
-            showCoinsData()
             // Initialize a new Runnable
-            val runnable = Runnable {
-
-                // Hide swipe to refresh icon animation
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
-
-            // Execute the task after specified time
-            handler.postDelayed(
-                runnable, 3000.toLong()
-            )
+            // Update the text view text with a random number
+            //coinsAdapter?.refresh()
+            // Hide swipe to refresh icon animation
+            binding.swipeRefreshLayout.isRefreshing = false
         }
-        addCoins(generateSubData())
+        coinsAdapter!!.addLoadStateListener {
+            if (it.refresh == LoadState.Loading) {
+                changeProgressBarVisibility(true)
+            } else {
+                changeProgressBarVisibility(false)
+            }
+        }
         return binding.root
-    }
-
-    private fun generateSubData():List<Coin> {
-        val coinsStubList = mutableListOf<Coin>()
-        val coin1 = Coin("bitcoin", "btc", "Bitcoin",
-            "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579", 49487.0)
-        val coin2 = Coin("ethereum", "eth", "Ethereum",
-            "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880", 3396.78)
-        val coin3 = Coin("cardano", "ada", "Cardano",
-            "https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860", 2.22)
-        val coin4 = Coin("tether", "usdt", "Tether",
-            "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png?1598003707", 1.0)
-        val coin5 = Coin("binancecoin", "bnb", "Binance Coin",
-            "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png?1547034615", 432.63)
-        val coin6 = Coin("solana", "sol", "Solana",
-            "https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png?1616489452", 167.42)
-        val coin7 = Coin("ripple", "xrp", "XRP",
-            "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1605778731", 1.05)
-        coinsStubList.add(coin1)
-        coinsStubList.add(coin2)
-        coinsStubList.add(coin3)
-        coinsStubList.add(coin4)
-        coinsStubList.add(coin5)
-        coinsStubList.add(coin6)
-        coinsStubList.add(coin7)
-        return coinsStubList
-    }
-
-
-    private fun addCoins(coins:List<Coin>){
-        coinsAdapter?.addCoins(coins)
     }
 
     override fun onCoinClicked(coin: Coin?) {
@@ -85,16 +61,32 @@ class MainFragment : Fragment(), CoinListItemClickListener {
         startActivity(intent)
     }
 
-    private fun loadCoinsData(){
-
-    }
-
-    private fun showCoinsData(){
-
-    }
-
     private fun changeProgressBarVisibility(show: Boolean) {
         binding.progressBar.setVisibility(if (show) View.VISIBLE else View.GONE)
+    }
+
+    private fun setupView() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            mainFragmentViewModel.listData.collectLatest { pagingData ->
+                coinsAdapter?.submitData(pagingData)
+            }
+        }
+    }
+
+    private fun setupList() {
+        coinsAdapter = CoinsListAdapter(this)
+        binding.cryptosRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = coinsAdapter
+        }
+    }
+
+    private fun setupViewModel() {
+        mainFragmentViewModel =
+            ViewModelProvider(
+                this,
+                MainFragmentViewModelFactory(Api.getApiService())
+            )[MainFragmentViewModel::class.java]
     }
 
 }
