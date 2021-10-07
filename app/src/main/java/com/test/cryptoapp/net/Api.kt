@@ -16,15 +16,15 @@ interface Api {
      *  Markets
      */
 
-    @GET("api/v3/coins/markets?vs_currency=usd&per_page=20&page=1")
-    suspend fun getCoins(@Query("page") pageNumber: Int): Response<List<Coin>>
+    @GET("api/v3/coins/markets?vs_currency=usd&per_page=20")
+    suspend fun getCoins(@Query("page") pageNumber: Int, @Query("order") sortBy: String): Response<List<Coin>>
 
 
     companion object {
         var builder = GsonBuilder()
 
         var gson = builder.create()
-        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor();
+        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
 
         // set your desired log level
         var httpClient = OkHttpClient.Builder();

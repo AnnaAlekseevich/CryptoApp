@@ -5,12 +5,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -27,14 +26,19 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private lateinit var binding: FragmentSettingsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentSettingsBinding.inflate(layoutInflater)
         binding.imageProfile.setOnClickListener {
@@ -46,8 +50,14 @@ class SettingsFragment : Fragment() {
         }
 
         Nammu.init(requireContext())
-
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val toolbar: Toolbar? =  requireActivity().findViewById(R.id.toolbar)
+        toolbar?.setOnMenuItemClickListener(this)
     }
 
     private fun onPictureClicked() {
@@ -191,17 +201,38 @@ class SettingsFragment : Fragment() {
     }
 
     private fun onDateSelected(dateTimeStampInMillis: Long) {
-        var currentSelectedDate = dateTimeStampInMillis
-        var dateTime: LocalDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val dateTime: LocalDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(currentSelectedDate),
+                Instant.ofEpochMilli(dateTimeStampInMillis),
                 ZoneId.systemDefault()
             )
         } else {
             TODO("VERSION.SDK_INT < O")
         }
-        var dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         binding.birthDay.setText(dateAsFormattedText)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.save -> {
+                saveData()
+                Log.d("SAVE!!!!","save!!!")
+                //Write here what to do you on click
+                Toast.makeText(
+                    context,
+                    "SAVExxx!!!!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun saveData(){
+        //todo create saving data to DB
+        Log.d("SAVE!!!!","Success!!!")
     }
 
 }

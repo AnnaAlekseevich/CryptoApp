@@ -9,7 +9,14 @@ import com.test.cryptoapp.data.MyPositionalDataSource
 import com.test.cryptoapp.net.Api
 
 class MainFragmentViewModel(private val apiService: Api) : ViewModel() {
+
+    val dataSource = MyPositionalDataSource(apiService)
     val listData = Pager(PagingConfig(pageSize = 20)) {
-        MyPositionalDataSource(apiService)
+        dataSource
     }.flow.cachedIn(viewModelScope)
+
+
+    fun sortBy(sortBy: String) {
+        dataSource.sortBy = sortBy
+    }
 }

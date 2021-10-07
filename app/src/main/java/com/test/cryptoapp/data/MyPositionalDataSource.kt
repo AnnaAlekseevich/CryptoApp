@@ -7,10 +7,15 @@ import com.test.cryptoapp.net.Api
 
 class MyPositionalDataSource(private val apiService: Api) :
     PagingSource<Int, Coin>() {
+
+    var sortBy: String = "market_cap_desc"
+
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Coin> {
         try {
             val currentLoadingPageKey = params.key ?: 1
-            val response = apiService.getCoins(currentLoadingPageKey)
+            val response =
+                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy)//, sortBy = this
             val pagedResponse = response.body()
 
 
