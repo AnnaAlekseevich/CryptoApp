@@ -16,11 +16,11 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
+import com.test.cryptoapp.crypto.CoinActivity
 import com.test.cryptoapp.crypto.CoinListItemClickListener
 import com.test.cryptoapp.crypto.CoinsListAdapter
-import com.test.cryptoapp.crypto.CryptoActivity
 import com.test.cryptoapp.databinding.FragmentMainBinding
-import com.test.cryptoapp.factory.MainFragmentViewModelFactory
+import com.test.cryptoapp.factories.MainFragmentViewModelFactory
 import com.test.cryptoapp.models.Coin
 import com.test.cryptoapp.net.Api
 import kotlinx.coroutines.flow.collectLatest
@@ -73,8 +73,8 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
     }
 
     override fun onCoinClicked(coin: Coin?) {
-        val intent = Intent(context, CryptoActivity::class.java)
-        startActivity(intent)
+        //put data to CoinActivity
+        coin?.let { sendData(it) }
     }
 
     private fun changeProgressBarVisibility(show: Boolean) {
@@ -148,6 +148,19 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
             }
         }
         return false
+    }
+
+    private fun sendData(coin: Coin) {
+        val intent = Intent(context, CoinActivity::class.java)
+        //PACK DATA
+        intent.putExtra("SENDER_KEY", "MainFragment")
+        var id = coin.cryptoId
+        var price = coin.currentPriceCoin
+        intent.putExtra("ID_KEY", id)
+        Log.d("ID_KEY", "send id = " + id)
+        intent.putExtra("PRICE_KEY", price)
+        startActivity(intent)
+
     }
 
 

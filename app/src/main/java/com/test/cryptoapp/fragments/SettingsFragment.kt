@@ -83,10 +83,10 @@ class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun showPopupPhoto() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getResources().getString(R.string.popup_menu_download_photo))
+        builder.setTitle(resources.getString(R.string.popup_menu_download_photo))
         val choosingImage = arrayOf(
-            getResources().getString(R.string.popup_menu_take_a_picture),
-            getResources().getString(R.string.popup_menu_pick_from_gallery)
+            resources.getString(R.string.popup_menu_take_a_picture),
+            resources.getString(R.string.popup_menu_pick_from_gallery)
         )
         builder.setItems(choosingImage) { dialog, which ->
             when (which) {

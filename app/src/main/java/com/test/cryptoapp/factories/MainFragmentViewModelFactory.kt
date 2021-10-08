@@ -1,4 +1,4 @@
-package com.test.cryptoapp.factory
+package com.test.cryptoapp.factories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

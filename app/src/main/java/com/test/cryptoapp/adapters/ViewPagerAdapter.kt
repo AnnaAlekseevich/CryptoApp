@@ -20,14 +20,6 @@ class ViewPagerAdapter(activity: FragmentActivity) :
         mFragmentTitleList.add(title)
     }
 
-    fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            0 -> "Main"
-            1 -> "Settings"
-            else -> "Main"
-        }
-    }
-
     override fun getItemCount(): Int {
         return mFragmentList.size
     }

@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".crypto.CryptoActivity"
+            android:name=".crypto.CoinActivity"
             android:launchMode="singleTask" />
     </application>
 

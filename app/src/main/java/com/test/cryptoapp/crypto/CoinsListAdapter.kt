@@ -12,7 +12,7 @@ import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.models.Coin
 
-class CoinsListAdapter(open val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {
+class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {
 
     inner class CoinsViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
@@ -20,9 +20,9 @@ class CoinsListAdapter(open val coinListItemClickListener: CoinListItemClickList
 
         fun updateCoin(coin: Coin) {
             binding.imageView.setImageURI(coin.urlItemCrypto?.toUri())
-            binding.titleCoinName.text = coin.getName()
-            binding.subTitleSymbolName.text = coin.getcryptoSymbol()
-            binding.priceCoin.text = coin.getcurrentPriceCoin().toString()
+            binding.titleCoinName.text = coin.cryptoName
+            binding.subTitleSymbolName.text = coin.cryptoSymbol
+            binding.priceCoin.text = coin.currentPriceCoin.toString()
             coin.urlItemCrypto?.toUri()?.let {
                 Glide
                     .with(binding.imageView.context)

@@ -15,7 +15,6 @@ class MainFragmentViewModel(private val apiService: Api) : ViewModel() {
         dataSource
     }.flow.cachedIn(viewModelScope)
 
-
     fun sortBy(sortBy: String) {
         dataSource.sortBy = sortBy
     }
