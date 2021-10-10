@@ -1,4 +1,4 @@
-package com.test.cryptoapp.fragments
+package com.test.cryptoapp.ui.fragments
 
 import android.Manifest
 import android.net.Uri
@@ -26,7 +26,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
-class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
+class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
 
@@ -54,11 +54,11 @@ class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val toolbar: Toolbar? =  requireActivity().findViewById(R.id.toolbar)
-        toolbar?.setOnMenuItemClickListener(this)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     private fun onPictureClicked() {
         if (Nammu.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -213,7 +213,7 @@ class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         binding.birthDay.setText(dateAsFormattedText)
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.save -> {
                 saveData()
@@ -227,7 +227,7 @@ class SettingsFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 return true
             }
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 
     private fun saveData(){

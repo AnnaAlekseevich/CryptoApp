@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -105,21 +104,18 @@
 
         <TextView
             android:id="@+id/day1"
-            android:layout_width="45dp"
-            android:layout_height="27dp"
-            android:layout_marginRight="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/point_24H"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/white"
             android:background="@drawable/background_time_chart"
             style="@style/CryptoActivityPointsTime"/>
 
         <TextView
             android:id="@+id/days7"
-            android:layout_width="45dp"
-            android:layout_height="27dp"
-            android:layout_marginRight="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/point_1W"
             android:layout_weight="1"
             android:gravity="center"
@@ -127,9 +123,8 @@
 
         <TextView
             android:id="@+id/days30"
-            android:layout_width="45dp"
-            android:layout_height="27dp"
-            android:layout_marginRight="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/point_1M"
             android:layout_weight="1"
             android:gravity="center"
@@ -137,9 +132,8 @@
 
         <TextView
             android:id="@+id/days365"
-            android:layout_width="45dp"
-            android:layout_height="27dp"
-            android:layout_marginRight="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/point_1Y"
@@ -147,8 +141,8 @@
 
         <TextView
             android:id="@+id/all"
-            android:layout_width="45dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/point_ALL"
             android:layout_weight="1"
             android:gravity="center"

@@ -1,35 +1,37 @@
-package com.test.cryptoapp.fragments
+package com.test.cryptoapp.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
 import com.test.cryptoapp.crypto.CoinActivity
 import com.test.cryptoapp.crypto.CoinListItemClickListener
-import com.test.cryptoapp.crypto.CoinsListAdapter
-import com.test.cryptoapp.databinding.FragmentMainBinding
+import com.test.cryptoapp.adapters.CoinsListAdapter
+import com.test.cryptoapp.databinding.FragmentCoinsListBinding
 import com.test.cryptoapp.factories.MainFragmentViewModelFactory
+import com.test.cryptoapp.fragments.FragmentCoinsListViewModel
 import com.test.cryptoapp.models.Coin
 import com.test.cryptoapp.net.Api
 import kotlinx.coroutines.flow.collectLatest
 
 
-class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemClickListener {
-    private lateinit var binding: FragmentMainBinding
-    private lateinit var mainFragmentViewModel: MainFragmentViewModel
+class FragmentCoinsList : Fragment(), CoinListItemClickListener {
+    private lateinit var binding: FragmentCoinsListBinding
+    private lateinit var mainFragmentViewModel: FragmentCoinsListViewModel
     private var coinsAdapter: CoinsListAdapter? = null
+    private lateinit var navController: NavController
+    private lateinit var toolBarNavigationUI: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +43,10 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentMainBinding.inflate(layoutInflater)
+        binding = FragmentCoinsListBinding.inflate(layoutInflater)
         coinsAdapter = CoinsListAdapter(this)
-
+        navController = findNavController(this)
+        //setUpToolbar()
         setupViewModel()
         setupList()
         Log.d("ListCoinsFromAPI", " " + setupList())
@@ -66,14 +69,12 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val toolbar: Toolbar? = requireActivity().findViewById(R.id.toolbar)
-        toolbar?.setOnMenuItemClickListener(this)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.coinslist_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCoinClicked(coin: Coin?) {
-        //put data to CoinActivity
         coin?.let { sendData(it) }
     }
 
@@ -102,7 +103,7 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
             ViewModelProvider(
                 this,
                 MainFragmentViewModelFactory(Api.getApiService())
-            )[MainFragmentViewModel::class.java]
+            )[FragmentCoinsListViewModel::class.java]
     }
 
     private fun showSortPopupMenu() {
@@ -140,9 +141,9 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
         dialog.show()
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
-            R.id.sort_popup_menu -> {
+            R.id.fragmentCoinsList -> {
                 showSortPopupMenu()
                 return true
             }
@@ -160,8 +161,6 @@ class MainFragment : Fragment(), CoinListItemClickListener, Toolbar.OnMenuItemCl
         Log.d("ID_KEY", "send id = " + id)
         intent.putExtra("PRICE_KEY", price)
         startActivity(intent)
-
     }
-
 
 }

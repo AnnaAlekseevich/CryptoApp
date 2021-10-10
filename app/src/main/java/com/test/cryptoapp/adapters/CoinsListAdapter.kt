@@ -1,4 +1,4 @@
-package com.test.cryptoapp.crypto
+package com.test.cryptoapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.test.cryptoapp.R
+import com.test.cryptoapp.crypto.CoinListItemClickListener
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.models.Coin
 
-class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {
+class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(
+    DataDifferntiator
+) {
 
     inner class CoinsViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
@@ -35,14 +38,14 @@ class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener)
         }
 
     }
-    override fun onBindViewHolder(holder: CoinsListAdapter.CoinsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CoinsViewHolder, position: Int) {
         getItem(position)?.let { holder.updateCoin(it) }
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CoinsListAdapter.CoinsViewHolder {
+    ): CoinsViewHolder {
         return CoinsViewHolder(
             LayoutInflater
                 .from(parent.context)

@@ -1,4 +1,4 @@
-package com.test.cryptoapp
+package com.test.cryptoapp.ui
 
 import androidx.lifecycle.ViewModel
 
