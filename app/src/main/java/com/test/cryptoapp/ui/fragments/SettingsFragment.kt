@@ -9,7 +9,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -50,7 +49,6 @@ class SettingsFragment : Fragment() {
         }
 
         Nammu.init(requireContext())
-        setHasOptionsMenu(true)
         return binding.root
     }
 

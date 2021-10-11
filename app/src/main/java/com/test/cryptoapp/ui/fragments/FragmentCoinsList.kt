@@ -1,6 +1,5 @@
 package com.test.cryptoapp.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -9,15 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
-import com.test.cryptoapp.crypto.CoinActivity
-import com.test.cryptoapp.crypto.CoinListItemClickListener
 import com.test.cryptoapp.adapters.CoinsListAdapter
+import com.test.cryptoapp.crypto.CoinListItemClickListener
 import com.test.cryptoapp.databinding.FragmentCoinsListBinding
 import com.test.cryptoapp.factories.MainFragmentViewModelFactory
 import com.test.cryptoapp.fragments.FragmentCoinsListViewModel
@@ -31,7 +27,6 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     private lateinit var mainFragmentViewModel: FragmentCoinsListViewModel
     private var coinsAdapter: CoinsListAdapter? = null
     private lateinit var navController: NavController
-    private lateinit var toolBarNavigationUI: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +37,9 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentCoinsListBinding.inflate(layoutInflater)
         coinsAdapter = CoinsListAdapter(this)
-        navController = findNavController(this)
-        //setUpToolbar()
+
         setupViewModel()
         setupList()
         Log.d("ListCoinsFromAPI", " " + setupList())
@@ -69,6 +62,12 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         return binding.root
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = findNavController()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.coinslist_menu, menu);
         super.onCreateOptionsMenu(menu, inflater)
@@ -76,6 +75,11 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
 
     override fun onCoinClicked(coin: Coin?) {
         coin?.let { sendData(it) }
+        val action =
+            FragmentCoinsListDirections
+                .actionFragmentCoinsListToFragmentCoinDetails()
+        navController.navigate(action)
+
     }
 
     private fun changeProgressBarVisibility(show: Boolean) {
@@ -131,7 +135,9 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         builder.setPositiveButton("OK") { dialog, which ->
             mainFragmentViewModel.sortBy(currentSort)
             //адаптер очистился и начал грузить новые данные
-            coinsAdapter?.submitData(lifecycle, PagingData.empty())
+            //coinsAdapter?.submitData(lifecycle, PagingData.empty())
+//            coinsAdapter?.retry()
+//            coinsAdapter?.notifyDataSetChanged()
 
         }
 
@@ -143,24 +149,29 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
-            R.id.fragmentCoinsList -> {
+            R.id.sort -> {
                 showSortPopupMenu()
                 return true
             }
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 
     private fun sendData(coin: Coin) {
-        val intent = Intent(context, CoinActivity::class.java)
-        //PACK DATA
-        intent.putExtra("SENDER_KEY", "MainFragment")
+        //todo change it after checking sending data
+        val bundle = Bundle()
         var id = coin.cryptoId
         var price = coin.currentPriceCoin
-        intent.putExtra("ID_KEY", id)
-        Log.d("ID_KEY", "send id = " + id)
-        intent.putExtra("PRICE_KEY", price)
-        startActivity(intent)
+        bundle.putString("ID_KEY", id)
+        bundle.putDouble("PRICE_KEY", price)
+
+        val fragment2 = FragmentCoinDetails()
+        fragment2.setArguments(bundle)
+
+        fragmentManager
+            ?.beginTransaction()
+            ?.replace(R.id.content, fragment2)
+            ?.commit()
     }
 
 }

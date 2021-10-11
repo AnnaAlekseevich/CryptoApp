@@ -1,4 +1,4 @@
-package com.test.cryptoapp.crypto
+package com.test.cryptoapp.ui.fragments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import com.test.cryptoapp.models.ChartPoints
 import com.test.cryptoapp.net.Api
 import kotlinx.coroutines.launch
 
-class CoinActivityViewModel(private val apiService: Api) : ViewModel() {
+class FragmentCoinDetailsViewModel(private val apiService: Api) : ViewModel() {
     var id: String = "bitcoin"
     private var vsCurrency: String = "usd"
     private var day: String = "1"
@@ -19,6 +19,4 @@ class CoinActivityViewModel(private val apiService: Api) : ViewModel() {
     suspend fun reloadChart(days: String, idCoin: String): ChartPoints? {
         return apiService.getPointsForChart(id = idCoin, vsCurrency = vsCurrency, days = days).body()
     }
-
-
 }

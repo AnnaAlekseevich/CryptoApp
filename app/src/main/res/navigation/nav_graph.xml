@@ -16,6 +16,10 @@
         <action
             android:id="@+id/action_fragmentCoinsList_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <argument
+            android:name="symbol"
+            app:argType="string"
+            android:defaultValue="Bitcoin" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

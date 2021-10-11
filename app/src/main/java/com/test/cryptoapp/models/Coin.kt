@@ -21,5 +21,5 @@ data class Coin(
 
     //текущая цена coin
     @SerializedName("current_price")
-    var currentPriceCoin: Double?
+    var currentPriceCoin: Double
 )
