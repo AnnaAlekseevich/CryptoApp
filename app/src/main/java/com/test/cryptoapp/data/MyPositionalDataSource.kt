@@ -2,7 +2,7 @@ package com.test.cryptoapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.test.cryptoapp.models.Coin
+import com.test.cryptoapp.net.models.Coin
 import com.test.cryptoapp.net.Api
 
 class MyPositionalDataSource(private val apiService: Api) :
@@ -29,8 +29,6 @@ class MyPositionalDataSource(private val apiService: Api) :
             return LoadResult.Error(e)
         }
     }
-
-
 
     override fun getRefreshKey(state: PagingState<Int, Coin>): Int? {
         return state.anchorPosition

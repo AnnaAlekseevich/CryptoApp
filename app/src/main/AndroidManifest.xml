@@ -29,20 +29,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name=".ui.activities.SplashScreenActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activities.MainActivity">
-        </activity>
-        <activity
-            android:name=".crypto.CoinActivity"
-            android:launchMode="singleTask" />
     </application>
 
 </manifest>

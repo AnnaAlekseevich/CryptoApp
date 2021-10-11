@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.fragments
+package com.test.cryptoapp.ui.fragments.FragmentSettings
 
 import android.Manifest
 import android.net.Uri
@@ -25,7 +25,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
-class SettingsFragment : Fragment() {
+class FragmentSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
 

@@ -1,4 +1,4 @@
-package com.test.cryptoapp.fragments
+package com.test.cryptoapp.ui.fragments.FragmentCoinsList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,5 +17,7 @@ class FragmentCoinsListViewModel(private val apiService: Api) : ViewModel() {
 
     fun sortBy(sortBy: String) {
         dataSource.sortBy = sortBy
+        //dataSource.invalidate()
+        dataSource.invalidate()
     }
 }

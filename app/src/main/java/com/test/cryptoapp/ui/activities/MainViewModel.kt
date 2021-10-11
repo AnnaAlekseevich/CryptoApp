@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui
+package com.test.cryptoapp.ui.activities
 
 import androidx.lifecycle.ViewModel
 

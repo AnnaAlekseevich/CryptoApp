@@ -2,6 +2,7 @@ package com.test.cryptoapp.ui.activities
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Toolbar>(R.id.toolbar)
             .setupWithNavController(navController, appBarConfiguration)
         setUpTabs()
+        hideToolbarBottomNavigationSplashScreen()
     }
 
     private fun setUpTabs() {
@@ -46,6 +48,18 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController)
                 || super.onOptionsItemSelected(item)
+    }
+
+    private fun hideToolbarBottomNavigationSplashScreen(){
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id.equals(R.id.fragmentSplashScreen)){
+                bottomNavigationView.visibility = View.GONE
+                binding.toolbar.visibility = View.GONE
+            } else {
+                bottomNavigationView.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
+            }
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.test.cryptoapp.adapters
+package com.test.cryptoapp.ui.activities.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.test.cryptoapp.R
-import com.test.cryptoapp.crypto.CoinListItemClickListener
+import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
-import com.test.cryptoapp.models.Coin
+import com.test.cryptoapp.net.models.Coin
 
 class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(
     DataDifferntiator

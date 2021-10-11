@@ -1,4 +1,4 @@
-package com.test.cryptoapp.models
+package com.test.cryptoapp.net.models
 
 data class User(
     val authorPhotoUrl: String,

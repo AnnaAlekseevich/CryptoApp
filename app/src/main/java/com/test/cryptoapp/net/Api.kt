@@ -1,8 +1,8 @@
 package com.test.cryptoapp.net
 
 import com.google.gson.GsonBuilder
-import com.test.cryptoapp.models.ChartPoints
-import com.test.cryptoapp.models.Coin
+import com.test.cryptoapp.net.models.ChartPoints
+import com.test.cryptoapp.net.models.Coin
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response

@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarCrypto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:titleTextColor="@color/white"
-        android:background="@color/UFO_green"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="75dp"
@@ -25,8 +15,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarCrypto" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/titlePrice"
@@ -37,7 +26,8 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbarCrypto" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/marketPrice"
@@ -104,18 +94,21 @@
 
         <TextView
             android:id="@+id/day1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="27dp"
+            android:layout_marginRight="31dp"
             android:text="@string/point_24H"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="@color/white"
             android:background="@drawable/background_time_chart"
             style="@style/CryptoActivityPointsTime"/>
 
         <TextView
             android:id="@+id/days7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="27dp"
+            android:layout_marginRight="31dp"
             android:text="@string/point_1W"
             android:layout_weight="1"
             android:gravity="center"
@@ -123,8 +116,9 @@
 
         <TextView
             android:id="@+id/days30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="27dp"
+            android:layout_marginRight="31dp"
             android:text="@string/point_1M"
             android:layout_weight="1"
             android:gravity="center"
@@ -132,8 +126,9 @@
 
         <TextView
             android:id="@+id/days365"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="27dp"
+            android:layout_marginRight="31dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/point_1Y"
@@ -141,8 +136,8 @@
 
         <TextView
             android:id="@+id/all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="27dp"
             android:text="@string/point_ALL"
             android:layout_weight="1"
             android:gravity="center"

@@ -3,12 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentCoinsList">
+    app:startDestination="@id/fragmentSplashScreen">
+    <fragment
+        android:id="@+id/fragmentSplashScreen"
+        android:name="com.test.cryptoapp.ui.fragments.FragmentSplashScreen.FragmentSplashScreen"
+        android:label="FragmentSplashScreen"
+        tools:layout="@layout/fragment_splash_screen">
+        <action
+            android:id="@+id/action_fragmentSplashScreen_to_fragmentCoinsList"
+            app:destination="@id/fragmentCoinsList" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentCoinsList"
-        android:name="com.test.cryptoapp.ui.fragments.FragmentCoinsList"
+        android:name="com.test.cryptoapp.ui.fragments.FragmentCoinsList.FragmentCoinsList"
         android:label="Cryptocurrencies"
-
         tools:layout="@layout/fragment_coins_list">
         <action
             android:id="@+id/action_fragmentCoinsList_to_fragmentCoinDetails"
@@ -18,17 +26,26 @@
             app:destination="@id/settingsFragment" />
         <argument
             android:name="symbol"
-            app:argType="string"
-            android:defaultValue="Bitcoin" />
+            app:argType="string" />
+        <argument
+            android:name="market_cap"
+            app:argType="float" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.test.cryptoapp.ui.fragments.SettingsFragment"
+        android:name="com.test.cryptoapp.ui.fragments.FragmentSettings.FragmentSettings"
         android:label="Settings"
         tools:layout="@layout/fragment_settings"/>
     <fragment
         android:id="@+id/fragmentCoinDetails"
-        android:name="com.test.cryptoapp.ui.fragments.FragmentCoinDetails"
+        android:name="com.test.cryptoapp.ui.fragments.FragmentConsDetails.FragmentCoinDetails"
         android:label="FragmentCoinDetails"
-        tools:layout="@layout/fragment_coin_delails"/>
+        tools:layout="@layout/fragment_coin_delails">
+        <argument
+            android:name="symbol"
+            app:argType="string" />
+        <argument
+            android:name="market_cap"
+            app:argType="float" />
+    </fragment>
 </navigation>

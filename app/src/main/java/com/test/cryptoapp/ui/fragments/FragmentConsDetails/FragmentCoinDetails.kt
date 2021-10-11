@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.fragments
+package com.test.cryptoapp.ui.fragments.FragmentConsDetails
 
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentCoinDelailsBinding
-import com.test.cryptoapp.factories.CoinDetailsFragmentViewModelFactory
+import com.test.cryptoapp.net.factories.CoinDetailsFragmentViewModelFactory
 import com.test.cryptoapp.net.Api
 
 class FragmentCoinDetails: Fragment(), View.OnClickListener {
@@ -21,9 +22,10 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentCoinDelailsBinding
     private lateinit var coinFragmentViewModel: FragmentCoinDetailsViewModel
     private lateinit var currentText: TextView
-    private var price: Double = 0.0
+    private var price: Float = 0.0F
     private lateinit var idCoin: String
     private var days: String = "1"
+    val args: FragmentCoinDetailsArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,25 +37,16 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentCoinDelailsBinding.inflate(layoutInflater)
-        val bundle = this.arguments
-
-        if (bundle != null) {
-            // handle your code here.
-            idCoin = bundle.getString("ID_KEY")!!
-            price = bundle.getDouble("PICE_KEY")
-        }
-
+        //todo change it - use with
         currentText = binding.day1
         binding.day1.setOnClickListener(this)
         binding.days7.setOnClickListener(this)
         binding.days30.setOnClickListener(this)
         binding.days365.setOnClickListener(this)
         binding.all.setOnClickListener(this)
-
-        setUpTabs()
-        //setSupportActionBar(binding.toolbarCrypto)
+        idCoin = args.symbol
+        price = args.marketCap
         setupViewModel()
         setupData()
         Log.d("ListCoinsFromAPI", " " + setupData())
@@ -76,20 +69,9 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
 //        binding.progressBar.setVisibility(if (show) View.VISIBLE else View.GONE)
 //    }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        return super.onCreateOptionsMenu(menu)
-//    }
-
-    private fun setUpTabs() {
-        binding.toolbarCrypto.setNavigationIcon(R.drawable.back_from_crypto_activity)
-        binding.toolbarCrypto.setLogo(R.drawable.crypto_icon)
-        binding.toolbarCrypto.setTitle(R.string.crypto_name)
-    }
-
     private fun setupView() {
         lifecycleScope.launchWhenCreated {
             coinFragmentViewModel.reloadChart(days, idCoin)
-            Log.d("Points list", "reloadChart = " + coinFragmentViewModel.reloadChart(days, idCoin))
         }
     }
 
@@ -111,22 +93,27 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
             R.id.day1 -> {
                 days = resources.getString(R.string.point_1day)
                 binding.day1
+                Log.d("DAYdetails", "day1")
             }
             R.id.days7 -> {
                 days = resources.getString(R.string.point_7days)
                 binding.days7
+                Log.d("DAYdetails", "days7")
             }
             R.id.days30 -> {
                 days = resources.getString(R.string.point_30days)
                 binding.days30
+                Log.d("DAYdetails", "days30")
             }
             R.id.days365 -> {
                 days = resources.getString(R.string.point_365days)
                 binding.days365
+                Log.d("DAYdetails", "days30")
             }
             R.id.all -> {
                 days = resources.getString(R.string.point_ALL)
                 binding.all
+                Log.d("DAYdetails", "ALL")
             }
             else -> days
         }
