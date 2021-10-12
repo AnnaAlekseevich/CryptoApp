@@ -9,15 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.test.cryptoapp.R
-import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.net.models.Coin
+import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 
-class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) : PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(
-    DataDifferntiator
-) {
+class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) :
+    PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {
 
-    inner class CoinsViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class CoinsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val binding = ItemListCryptoBinding.bind(view)
 

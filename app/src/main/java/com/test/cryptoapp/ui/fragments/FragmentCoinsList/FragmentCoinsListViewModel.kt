@@ -10,14 +10,13 @@ import com.test.cryptoapp.net.Api
 
 class FragmentCoinsListViewModel(private val apiService: Api) : ViewModel() {
 
-    val dataSource = MyPositionalDataSource(apiService)
+    var sortingType: String = "market_cap_desc"
+
     val listData = Pager(PagingConfig(pageSize = 20)) {
-        dataSource
+        MyPositionalDataSource(apiService, sortingType)
     }.flow.cachedIn(viewModelScope)
 
     fun sortBy(sortBy: String) {
-        dataSource.sortBy = sortBy
-        //dataSource.invalidate()
-        dataSource.invalidate()
+        sortingType = sortBy
     }
 }

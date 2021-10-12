@@ -65,10 +65,6 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
         }
     }
 
-//    private fun changeProgressBarVisibility(show: Boolean) {
-//        binding.progressBar.setVisibility(if (show) View.VISIBLE else View.GONE)
-//    }
-
     private fun setupView() {
         lifecycleScope.launchWhenCreated {
             coinFragmentViewModel.reloadChart(days, idCoin)

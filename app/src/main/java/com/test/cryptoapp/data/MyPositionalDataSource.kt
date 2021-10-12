@@ -5,10 +5,10 @@ import androidx.paging.PagingState
 import com.test.cryptoapp.net.models.Coin
 import com.test.cryptoapp.net.Api
 
-class MyPositionalDataSource(private val apiService: Api) :
+class MyPositionalDataSource(private val apiService: Api, var sortingType: String) :
     PagingSource<Int, Coin>() {
 
-    var sortBy: String = "market_cap_desc"
+    var sortBy: String = sortingType
     private var changePercentage: String = "24h"
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Coin> {
@@ -31,6 +31,10 @@ class MyPositionalDataSource(private val apiService: Api) :
     }
 
     override fun getRefreshKey(state: PagingState<Int, Coin>): Int? {
-        return state.anchorPosition
+        //return state.anchorPosition
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 }

@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
-import com.test.cryptoapp.ui.activities.adapter.CoinsListAdapter
-import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.databinding.FragmentCoinsListBinding
+import com.test.cryptoapp.net.Api
 import com.test.cryptoapp.net.factories.MainFragmentViewModelFactory
 import com.test.cryptoapp.net.models.Coin
-import com.test.cryptoapp.net.Api
+import com.test.cryptoapp.ui.activities.CoinListItemClickListener
+import com.test.cryptoapp.ui.activities.adapter.CoinsListAdapter
 import kotlinx.coroutines.flow.collectLatest
 
 class FragmentCoinsList : Fragment(), CoinListItemClickListener {
@@ -36,23 +36,19 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     ): View {
         binding = FragmentCoinsListBinding.inflate(layoutInflater)
         coinsAdapter = CoinsListAdapter(this)
-
         setupViewModel()
         setupList()
         setupView()
-
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            // Update the text view text with a random number
-            //coinsAdapter?.refresh()
-            // Hide swipe to refresh icon animation
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
-        coinsAdapter!!.addLoadStateListener {
-            if (it.refresh == LoadState.Loading) {
+        coinsAdapter?.addLoadStateListener { loadStates ->
+            binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
+            if(loadStates.refresh == LoadState.Loading){
                 changeProgressBarVisibility(true)
-            } else {
+            } else{
                 changeProgressBarVisibility(false)
             }
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            coinsAdapter?.refresh()
         }
         setHasOptionsMenu(true)
         return binding.root
@@ -108,12 +104,9 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     }
 
     private fun showSortPopupMenu() {
-        // setup the alert builder
         var currentSort = "market_cap_desc"
-        //volume_desc
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Sort")
-        // add a radio button list
         val sort = arrayOf(
             resources.getString(R.string.by_price),
             resources.getString(R.string.by_volume_price)
@@ -125,18 +118,12 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
             } else {
                 "volume_desc"
             }
-
         }
         // add OK and Cancel buttons
         builder.setPositiveButton("OK") { dialog, which ->
             mainFragmentViewModel.sortBy(currentSort)
-            //адаптер очистился и начал грузить новые данные
-            //coinsAdapter?.submitData(lifecycle, PagingData.empty())
-            //coinsAdapter?.submitData()
-//            coinsAdapter?.retry()
-//            coinsAdapter?.notifyDataSetChanged()
+            coinsAdapter?.refresh()
         }
-
         builder.setNegativeButton("Cancel", null)
         // create and show the alert dialog
         val dialog = builder.create()
