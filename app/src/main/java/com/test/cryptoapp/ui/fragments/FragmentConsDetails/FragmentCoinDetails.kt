@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionInflater
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentCoinDelailsBinding
 import com.test.cryptoapp.net.factories.CoinDetailsFragmentViewModelFactory
@@ -23,13 +25,18 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
     private lateinit var coinFragmentViewModel: FragmentCoinDetailsViewModel
     private lateinit var currentText: TextView
     private var price: Float = 0.0F
+    private var highPrice: Float = 0.0F
+    private var lowPrice: Float = 0.0F
     private lateinit var idCoin: String
     private var days: String = "1"
-    val args: FragmentCoinDetailsArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        sharedElementEnterTransition = ChangeBounds().apply {
+            duration = 1500
+        }
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(
@@ -45,8 +52,16 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
         binding.days30.setOnClickListener(this)
         binding.days365.setOnClickListener(this)
         binding.all.setOnClickListener(this)
-        idCoin = args.symbol
-        price = args.marketCap
+        idCoin = arguments?.getString("symbol")!!
+        price = arguments?.getFloat("price")!!
+        highPrice = arguments?.getFloat("highPrice")!!
+        lowPrice = arguments?.getFloat("lowPrice")!!
+        sharedElementEnterTransition = ChangeBounds().apply {
+            duration = 750
+        }
+        sharedElementEnterTransition = TransitionInflater.from(this.context).inflateTransition(android.R.transition.move)
+//        sharedElementReturnTransition = TransitionInflater.from(this.context).inflateTransition(android.R.transition.move)
+
         setupViewModel()
         setupData()
         Log.d("ListCoinsFromAPI", " " + setupData())
@@ -72,8 +87,9 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
     }
 
     private fun setupData() {
-        binding.titlePrice.text = price.toString()
-
+        binding.priceText.text = price.toString()
+        binding.highPrice.text = highPrice.toString()
+        binding.lowPrice.text = lowPrice.toString()
     }
 
     private fun setupViewModel() {
@@ -88,28 +104,28 @@ class FragmentCoinDetails: Fragment(), View.OnClickListener {
         val newTextView = when (v?.id) {
             R.id.day1 -> {
                 days = resources.getString(R.string.point_1day)
+                Log.d("DAY", "currentDays1 = " + days)
                 binding.day1
-                Log.d("DAYdetails", "day1")
             }
             R.id.days7 -> {
                 days = resources.getString(R.string.point_7days)
+                Log.d("DAY", "currentDays7 = " + days)
                 binding.days7
-                Log.d("DAYdetails", "days7")
             }
             R.id.days30 -> {
                 days = resources.getString(R.string.point_30days)
+                Log.d("DAY", "currentDays30 = " + days)
                 binding.days30
-                Log.d("DAYdetails", "days30")
             }
             R.id.days365 -> {
                 days = resources.getString(R.string.point_365days)
+                Log.d("DAY", "currentDays365 = " + days)
                 binding.days365
-                Log.d("DAYdetails", "days30")
             }
             R.id.all -> {
                 days = resources.getString(R.string.point_ALL)
+                Log.d("DAY", "currentDaysALL = " + days)
                 binding.all
-                Log.d("DAYdetails", "ALL")
             }
             else -> days
         }

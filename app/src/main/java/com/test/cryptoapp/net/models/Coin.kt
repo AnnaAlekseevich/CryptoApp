@@ -21,5 +21,15 @@ data class Coin(
 
     //текущая цена coin
     @SerializedName("current_price")
-    var currentPriceCoin: Double
+    var currentPriceCoin: Double,
+
+    //high price
+    @SerializedName("high_24h")
+    var highPrice: Double,
+
+    //low price
+    @SerializedName("low_24h")
+    var lowPrice: Double
+//    "high_24h": 49785,
+//"low_24h": 47188,
 )

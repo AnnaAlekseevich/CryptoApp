@@ -31,7 +31,6 @@ class MyPositionalDataSource(private val apiService: Api, var sortingType: Strin
     }
 
     override fun getRefreshKey(state: PagingState<Int, Coin>): Int? {
-        //return state.anchorPosition
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

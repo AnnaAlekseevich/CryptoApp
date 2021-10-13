@@ -12,6 +12,7 @@ import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.net.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
+import kotlinx.android.synthetic.main.item_list_crypto.view.*
 
 class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) :
     PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {
@@ -24,7 +25,8 @@ class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener)
             binding.imageView.setImageURI(coin.urlItemCrypto?.toUri())
             binding.titleCoinName.text = coin.cryptoName
             binding.subTitleSymbolName.text = coin.cryptoSymbol
-            binding.priceCoin.text = coin.currentPriceCoin.toString()
+            binding.priceText.text = coin.currentPriceCoin.toString()
+            binding.priceText.transitionName = "priceText"
             coin.urlItemCrypto?.toUri()?.let {
                 Glide
                     .with(binding.imageView.context)
@@ -32,7 +34,7 @@ class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener)
                     .into(binding.imageView)
             }
             binding.clItem.setOnClickListener {
-                coinListItemClickListener.onCoinClicked(coin)
+                coinListItemClickListener.onCoinClicked(coin, binding.priceText)
             }
         }
 

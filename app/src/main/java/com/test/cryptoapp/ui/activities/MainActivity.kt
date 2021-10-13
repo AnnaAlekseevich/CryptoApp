@@ -55,7 +55,10 @@ class MainActivity : AppCompatActivity() {
             if (destination.id.equals(R.id.fragmentSplashScreen)){
                 bottomNavigationView.visibility = View.GONE
                 binding.toolbar.visibility = View.GONE
-            } else {
+            } else if (destination.id.equals(R.id.fragmentCoinDetails)){
+                bottomNavigationView.visibility = View.GONE
+            }
+            else {
                 bottomNavigationView.visibility = View.VISIBLE
                 binding.toolbar.visibility = View.VISIBLE
             }

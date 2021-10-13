@@ -30,6 +30,15 @@
         <argument
             android:name="market_cap"
             app:argType="float" />
+        <argument
+            android:name="highPrice"
+            app:argType="float" />
+        <argument
+            android:name="lowPrice"
+            app:argType="float" />
+        <argument
+            android:name="perfectText"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -47,5 +56,14 @@
         <argument
             android:name="market_cap"
             app:argType="float" />
+        <argument
+        android:name="highPrice"
+        app:argType="float" />
+        <argument
+            android:name="lowPrice"
+            app:argType="float" />
+        <argument
+            android:name="perfectText"
+            app:argType="string" />
     </fragment>
 </navigation>
