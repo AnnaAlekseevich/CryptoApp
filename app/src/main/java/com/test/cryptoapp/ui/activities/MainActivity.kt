@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -32,8 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration =
             AppBarConfiguration(setOf(R.id.fragmentCoinsList, R.id.settingsFragment))
-        findViewById<Toolbar>(R.id.toolbar)
-            .setupWithNavController(navController, appBarConfiguration)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         setUpTabs()
         hideToolbarBottomNavigationSplashScreen()
     }
@@ -64,5 +62,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onFragmentInteraction(title: String?) {
+        supportActionBar?.title = title
+//        supportActionBar?.setLogo(R.drawable.small_icon_crypto)
+        binding.toolbar.setNavigationIcon(R.drawable.back_from_crypto_activity)
+    }
+
 
 }

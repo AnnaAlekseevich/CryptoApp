@@ -26,7 +26,6 @@ class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener)
             binding.titleCoinName.text = coin.cryptoName
             binding.subTitleSymbolName.text = coin.cryptoSymbol
             binding.priceText.text = coin.currentPriceCoin.toString()
-            binding.priceText.transitionName = "priceText"
             coin.urlItemCrypto?.toUri()?.let {
                 Glide
                     .with(binding.imageView.context)

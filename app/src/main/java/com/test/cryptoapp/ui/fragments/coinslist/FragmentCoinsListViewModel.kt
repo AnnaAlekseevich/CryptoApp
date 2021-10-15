@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.fragments.FragmentCoinsList
+package com.test.cryptoapp.ui.fragments.coinslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

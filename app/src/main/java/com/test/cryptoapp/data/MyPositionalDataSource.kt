@@ -9,13 +9,14 @@ class MyPositionalDataSource(private val apiService: Api, var sortingType: Strin
     PagingSource<Int, Coin>() {
 
     var sortBy: String = sortingType
-    private var changePercentage: String = "24h"
+    private var changePercentage: String = ""
+    private var ids: String = ""
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Coin> {
         try {
             val currentLoadingPageKey = params.key ?: 1
             val response =
-                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy, changePercentage = changePercentage)
+                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy, changePercentage = changePercentage,ids = ids)
             val pagedResponse = response.body()
 
             val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1

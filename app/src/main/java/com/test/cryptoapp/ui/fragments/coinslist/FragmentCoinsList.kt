@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.fragments.FragmentCoinsList
+package com.test.cryptoapp.ui.fragments.coinslist
 
 import android.os.Bundle
 import android.util.Log
@@ -52,7 +52,7 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         binding.swipeRefreshLayout.setOnRefreshListener {
             coinsAdapter?.refresh()
         }
-        setHasOptionsMenu(true)
+        //setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -69,18 +69,17 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     override fun onCoinClicked(coin: Coin?, priceText: View) {
         if (coin != null) {
             var id = coin?.cryptoId
-            Log.d("BUNDLE", "symbol = " + id)
-            val price = coin?.currentPriceCoin
-            val highPrice = coin?.highPrice
-            val lowPrice = coin?.lowPrice
+            val marketCap = coin?.marketCap
+            val currentPrice = coin?.currentPriceCoin
+            val percentage = coin?.changePercentage
             val bundle: Bundle = Bundle(4)
                 .apply {
-                    putString("symbol", id)
-                    putFloat("price", price.toFloat())
-                    putFloat("highPrice", highPrice.toFloat())
-                    putFloat("lowPrice", lowPrice.toFloat())
+                    putString("id", id)
+                    putFloat("marketCap", marketCap.toFloat())
+                    putFloat("currentPrice", currentPrice.toFloat())
+                    putString("percentage", percentage)
                 }
-
+            priceText.transitionName = "priceText"
             val perfectText = FragmentNavigatorExtras(
                 priceText to "priceText"
             )
@@ -157,11 +156,5 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         }
         return super.onOptionsItemSelected(item)
     }
-
-//    private fun transitionWithTextViewInRecyclerViewItem(view: View){
-//        val destination = FragmentCoinsListDirections.actionFragmentCoinsListToFragmentCoinDetails()
-//        val extras = FragmentNavigatorExtras(view to "priceCoinDetails")
-//        findNavController().navigate(destination, extras)
-//    }
 
 }

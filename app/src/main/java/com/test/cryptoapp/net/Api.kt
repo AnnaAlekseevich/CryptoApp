@@ -17,10 +17,10 @@ interface Api {
     /**
      *  Markets
      */
-
+//ids
     @GET("api/v3/coins/markets?vs_currency=usd&per_page=20")
-    suspend fun getCoins(@Query("page") pageNumber: Int, @Query("order") sortBy: String,
-                         @Query("price_change_percentage") changePercentage: String): Response<List<Coin>>
+    suspend fun getCoins(@Query("page") pageNumber: Int?, @Query("order") sortBy: String,
+                         @Query("price_change_percentage") changePercentage: String, @Query("ids") ids: String): Response<List<Coin>>
 
     @GET("api/v3/coins/{id}/market_chart")
     suspend fun getPointsForChart(@Path("id") id: String, @Query("vs_currency") vsCurrency: String,
@@ -35,8 +35,6 @@ interface Api {
 
         // set your desired log level
         var httpClient = OkHttpClient.Builder();
-// add your other interceptors
-// add logging as last interceptor
 
         fun getApiService() = Retrofit.Builder()
             .baseUrl("https://api.coingecko.com/")

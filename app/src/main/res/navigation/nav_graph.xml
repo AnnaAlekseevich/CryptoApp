@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentCoinsList"
-        android:name="com.test.cryptoapp.ui.fragments.FragmentCoinsList.FragmentCoinsList"
+        android:name="com.test.cryptoapp.ui.fragments.coinslist.FragmentCoinsList"
         android:label="Cryptocurrencies"
         tools:layout="@layout/fragment_coins_list">
         <action
@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_settings"/>
     <fragment
         android:id="@+id/fragmentCoinDetails"
-        android:name="com.test.cryptoapp.ui.fragments.FragmentConsDetails.FragmentCoinDetails"
+        android:name="com.test.cryptoapp.ui.fragments.consdetails.FragmentCoinDetails"
         android:label="FragmentCoinDetails"
         tools:layout="@layout/fragment_coin_delails">
         <argument
