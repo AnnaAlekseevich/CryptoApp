@@ -38,6 +38,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     private var currentPriceCoin: Float = 0.0F
     private lateinit var idCoin: String
     private lateinit var percentage: String
+    private lateinit var icon: String
     private var days: String = ""
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -72,7 +73,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         marketCapCoin = arguments?.getFloat("marketCap")!!
         percentage = arguments?.getString("percentage")!!
         currentPriceCoin = arguments?.getFloat("currentPrice")!!
-
+        icon = arguments?.getString("icon")!!
         Log.d("arguments", "idCoin = " + idCoin)
         Log.d("arguments", "price = " + marketCapCoin)
         var coin = Coin(
@@ -91,7 +92,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         sharedElementEnterTransition =
             TransitionInflater.from(this.context).inflateTransition(android.R.transition.move)
         if (mListener != null) {
-            mListener!!.onFragmentInteraction("TEST TITLE");
+            mListener!!.onFragmentInteraction(idCoin)
         }
         setupViewModel()
         showDataCoin(coin)
@@ -101,7 +102,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        activity?.actionBar?.title = "COINT TEST NAME"
+        activity?.actionBar?.title = idCoin
         //activity?.actionBar?.setLogo(R.drawable.small_icon_crypto)
     }
 

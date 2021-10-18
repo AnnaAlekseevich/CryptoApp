@@ -1,21 +1,29 @@
-package com.test.cryptoapp.ui.fragments.FragmentSettings
+package com.test.cryptoapp.ui.fragments.settings
 
 import android.Manifest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.test.cryptoapp.BuildConfig
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSettingsBinding
+import com.test.cryptoapp.db.DatabaseBuilder
+import com.test.cryptoapp.db.DatabaseHelperImpl
+import com.test.cryptoapp.net.factories.SettingFragmentViewModelFactory
 import pl.tajchert.nammu.Nammu
 import pl.tajchert.nammu.PermissionCallback
 import java.io.File
@@ -28,6 +36,8 @@ import java.time.format.DateTimeFormatter
 class FragmentSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
+    private lateinit var settingViewModel: FragmentSettingsViewModel
+    private lateinit var itemSave: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,22 +48,32 @@ class FragmentSettings : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentSettingsBinding.inflate(layoutInflater)
-        binding.imageProfile.setOnClickListener {
-            Log.d("AddPhoto", "binding.imageProfile.setOnClickListener")
-            showPopupPhoto()
-        }
-        binding.birthDay.setOnClickListener {
-            showInputPicker()
+        setupViewModel()
+
+        with(binding) {
+            imageProfile.setOnClickListener {
+                Log.d("AddPhoto", "binding.imageProfile.setOnClickListener")
+                showPopupPhoto()
+            }
+            birthDay.setOnClickListener {
+                showInputPicker()
+            }
+            FirstName.addTextChangedListener(textWatcherFirstName)
+            LastName.addTextChangedListener(textWatcherLastName)
         }
 
+        setUserData()
         Nammu.init(requireContext())
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_menu, menu);
+        inflater.inflate(R.menu.settings_menu, menu)
+        itemSave = menu.findItem(R.id.save)
+        settingViewModel.savingEnabledLiveData.observe(viewLifecycleOwner, {
+            itemSave.isEnabled = it
+        })
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -118,6 +138,7 @@ class FragmentSettings : Fragment() {
                 .load(it)
                 .into(binding.imageProfile)
         }
+        settingViewModel.setPhotoUser(pictureUri.toString())
     }
 
     override fun onRequestPermissionsResult(
@@ -208,29 +229,66 @@ class FragmentSettings : Fragment() {
             TODO("VERSION.SDK_INT < O")
         }
         val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        settingViewModel.setDateOfBirth(dateAsFormattedText)
         binding.birthDay.setText(dateAsFormattedText)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.save -> {
-                saveData()
-                Log.d("SAVE!!!!","save!!!")
-                //Write here what to do you on click
-                Toast.makeText(
-                    context,
-                    "SAVExxx!!!!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                settingViewModel.onSave()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveData(){
-        //todo create saving data to DB
-        Log.d("SAVE!!!!","Success!!!")
+    private fun setupViewModel() {
+        settingViewModel = ViewModelProviders.of(
+            this,
+            SettingFragmentViewModelFactory(
+                DatabaseHelperImpl(DatabaseBuilder.getInstance(requireContext()))
+            )
+        ).get(FragmentSettingsViewModel::class.java)
+    }
+
+    private val textWatcherFirstName = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            settingViewModel.setFirstName(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+    }
+
+    private val textWatcherLastName = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            settingViewModel.setLastName(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+    }
+
+    private fun setUserData() {
+        settingViewModel.isUserExistLiveData.observe(viewLifecycleOwner, {
+            if (it == true) {
+                val userData = settingViewModel.getUser()
+                with(binding) {
+                    setBigImage(userData.authorPhotoUrl?.toUri())
+                    FirstName.setText(userData.firstName, TextView.BufferType.EDITABLE)
+                    LastName.setText(userData.lastName, TextView.BufferType.EDITABLE)
+                    birthDay.setText(userData.dateOfBirth, TextView.BufferType.EDITABLE)
+                }
+            }
+        })
     }
 
 }

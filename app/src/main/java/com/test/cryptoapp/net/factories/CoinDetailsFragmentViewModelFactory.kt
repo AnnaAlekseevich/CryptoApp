@@ -12,7 +12,6 @@ class CoinDetailsFragmentViewModelFactory(private val api: Api, private val ioDi
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FragmentCoinDetailsViewModel::class.java)) {
             return FragmentCoinDetailsViewModel(api, ioDispatcher) as T
-//            return FragmentCoinDetailsViewModel(api) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.activities.adapter
+package com.test.cryptoapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,6 @@ import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.net.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
-import kotlinx.android.synthetic.main.item_list_crypto.view.*
 
 class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) :
     PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {

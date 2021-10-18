@@ -27,7 +27,6 @@ class FragmentCoinDetailsViewModel(
     fun putArguments(arguments: Bundle) {
         //put all data
         requestsForCoinDetails(id, daysChoose, daysChoosePercentage)
-
     }
 
     private val latestDetailsForCharts: Flow<ChartPoints>
@@ -47,7 +46,8 @@ class FragmentCoinDetailsViewModel(
                     pageNumber = null,
                     ids = id,
                     changePercentage = daysChoosePercentage,
-                    sortBy = ""
+                    sortBy = "",
+                    perPage = 250
                 )
             Log.d("CHECK", "daysChoosePercentage = $daysChoosePercentage")
             latestDetailsChangePercentage.body()?.get(0)
@@ -67,7 +67,9 @@ class FragmentCoinDetailsViewModel(
             latestDetailsForCharts.zip(priceChangePercentage) { a, c ->
                 Log.d("PAIR", "init data ")
                 _myUiState.value = UiState.Success(Pair(c, a))
-            }.collect { resp -> }
+            }.collect { resp ->
+
+            }
         }
     }
 

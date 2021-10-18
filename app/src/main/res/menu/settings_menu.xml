@@ -5,6 +5,6 @@
     <item
         android:id="@+id/save"
         app:showAsAction="always"
-        android:icon="@drawable/save_icon"
+        android:icon="@drawable/save_button_selector"
         android:title="@string/settings"/>
 </menu>

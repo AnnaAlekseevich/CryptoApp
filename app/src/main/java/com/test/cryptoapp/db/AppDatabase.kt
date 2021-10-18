@@ -1,7 +1,12 @@
-package com.test.cryptoapp.data
+package com.test.cryptoapp.db
 
 import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.test.cryptoapp.net.models.Coin
+import com.test.cryptoapp.net.models.User
 
-@Database(entities = [Note::class, UserModel::class], version = 1, exportSchema = false)
-abstract class AppDatabase {
+@Database(entities = [Coin::class, User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+    abstract fun coinDao(): CoinDao
 }

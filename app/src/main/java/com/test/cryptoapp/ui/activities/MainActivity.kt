@@ -65,9 +65,7 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
 
     override fun onFragmentInteraction(title: String?) {
         supportActionBar?.title = title
-//        supportActionBar?.setLogo(R.drawable.small_icon_crypto)
         binding.toolbar.setNavigationIcon(R.drawable.back_from_crypto_activity)
     }
-
 
 }

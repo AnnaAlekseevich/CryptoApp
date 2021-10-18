@@ -1,7 +1,6 @@
 package com.test.cryptoapp.ui.fragments.coinslist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -18,7 +17,7 @@ import com.test.cryptoapp.net.Api
 import com.test.cryptoapp.net.factories.MainFragmentViewModelFactory
 import com.test.cryptoapp.net.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
-import com.test.cryptoapp.ui.activities.adapter.CoinsListAdapter
+import com.test.cryptoapp.ui.adapter.CoinsListAdapter
 import kotlinx.coroutines.flow.collectLatest
 
 class FragmentCoinsList : Fragment(), CoinListItemClickListener {
@@ -72,12 +71,14 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
             val marketCap = coin?.marketCap
             val currentPrice = coin?.currentPriceCoin
             val percentage = coin?.changePercentage
-            val bundle: Bundle = Bundle(4)
+            val icon = coin?.urlItemCrypto
+            val bundle: Bundle = Bundle(5)
                 .apply {
                     putString("id", id)
                     putFloat("marketCap", marketCap.toFloat())
                     putFloat("currentPrice", currentPrice.toFloat())
                     putString("percentage", percentage)
+                    putString("icon", icon)
                 }
             priceText.transitionName = "priceText"
             val perfectText = FragmentNavigatorExtras(

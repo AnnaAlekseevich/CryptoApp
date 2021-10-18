@@ -1,15 +1,12 @@
-package com.test.cryptoapp.ui.fragments.FragmentSplashScreen
+package com.test.cryptoapp.ui.fragments.splashScreen
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.cryptoapp.db.DatabaseHelper
 import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.models.Coin
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class FragmentSplashScreenViewModel(private val api: Api, private val dbHelper: DatabaseHelper) :
     ViewModel() {

@@ -16,7 +16,7 @@ class MyPositionalDataSource(private val apiService: Api, var sortingType: Strin
         try {
             val currentLoadingPageKey = params.key ?: 1
             val response =
-                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy, changePercentage = changePercentage,ids = ids)
+                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy, changePercentage = changePercentage,ids = ids, perPage = 250)
             val pagedResponse = response.body()
 
             val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
