@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
-import com.test.cryptoapp.net.models.Coin
+import com.test.cryptoapp.domain.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 
 class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) :

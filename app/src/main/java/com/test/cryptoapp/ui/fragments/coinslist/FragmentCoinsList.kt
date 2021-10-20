@@ -13,9 +13,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentCoinsListBinding
-import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.factories.MainFragmentViewModelFactory
-import com.test.cryptoapp.net.models.Coin
+import com.test.cryptoapp.domain.net.Api
+import com.test.cryptoapp.ui.factories.MainFragmentViewModelFactory
+import com.test.cryptoapp.domain.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.ui.adapter.CoinsListAdapter
 import kotlinx.coroutines.flow.collectLatest

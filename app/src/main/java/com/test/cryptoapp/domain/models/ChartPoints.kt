@@ -1,4 +1,4 @@
-package com.test.cryptoapp.net.models
+package com.test.cryptoapp.domain.models
 
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName

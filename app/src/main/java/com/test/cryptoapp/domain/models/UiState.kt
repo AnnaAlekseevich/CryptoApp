@@ -1,4 +1,4 @@
-package com.test.cryptoapp.net.models
+package com.test.cryptoapp.domain.models
 
 sealed class UiState<out T : Any> {
 

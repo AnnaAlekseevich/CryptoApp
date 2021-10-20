@@ -84,7 +84,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     //chart library
-    implementation 'com.tradingview:lightweightcharts:3.6.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     //for picker
     implementation 'com.google.android.material:material:1.2.0-alpha04'

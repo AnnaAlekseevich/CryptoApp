@@ -2,8 +2,8 @@ package com.test.cryptoapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.test.cryptoapp.net.models.Coin
-import com.test.cryptoapp.net.Api
+import com.test.cryptoapp.domain.models.Coin
+import com.test.cryptoapp.domain.net.Api
 
 class MyPositionalDataSource(private val apiService: Api, var sortingType: String) :
     PagingSource<Int, Coin>() {

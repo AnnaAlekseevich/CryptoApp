@@ -6,7 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.test.cryptoapp.data.MyPositionalDataSource
-import com.test.cryptoapp.net.Api
+import com.test.cryptoapp.domain.net.Api
 
 class FragmentCoinsListViewModel(private val apiService: Api) : ViewModel() {
 

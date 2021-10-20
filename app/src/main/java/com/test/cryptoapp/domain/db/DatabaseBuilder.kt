@@ -1,4 +1,4 @@
-package com.test.cryptoapp.db
+package com.test.cryptoapp.domain.db
 
 import android.content.Context
 import androidx.room.Room

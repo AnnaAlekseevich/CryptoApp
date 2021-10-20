@@ -12,10 +12,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSplashScreenBinding
-import com.test.cryptoapp.db.DatabaseBuilder
-import com.test.cryptoapp.db.DatabaseHelperImpl
-import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.factories.SplashScreenViewModelFactory
+import com.test.cryptoapp.domain.db.DatabaseBuilder
+import com.test.cryptoapp.domain.db.DatabaseHelperImpl
+import com.test.cryptoapp.domain.net.Api
+import com.test.cryptoapp.ui.factories.SplashScreenViewModelFactory
 
 class FragmentSplashScreen: Fragment() {
 

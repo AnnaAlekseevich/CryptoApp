@@ -1,7 +1,7 @@
-package com.test.cryptoapp.db
+package com.test.cryptoapp.domain.db
 
-import com.test.cryptoapp.net.models.Coin
-import com.test.cryptoapp.net.models.User
+import com.test.cryptoapp.domain.models.Coin
+import com.test.cryptoapp.domain.models.User
 
 interface DatabaseHelper {
     suspend fun getCoins(): List<Coin>

@@ -2,6 +2,7 @@ package com.test.cryptoapp.ui.fragments.consdetails
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,15 +17,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionInflater
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.YAxis.AxisDependency
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.snackbar.Snackbar
 import com.test.cryptoapp.R
+import com.test.cryptoapp.data.adapters.ChartPointsToListEntryAdapter
 import com.test.cryptoapp.databinding.FragmentCoinDelailsBinding
-import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.factories.CoinDetailsFragmentViewModelFactory
-import com.test.cryptoapp.net.models.ChartPoints
-import com.test.cryptoapp.net.models.Coin
-import com.test.cryptoapp.net.models.UiState
+import com.test.cryptoapp.domain.models.ChartPoints
+import com.test.cryptoapp.domain.models.Coin
+import com.test.cryptoapp.domain.models.UiState
+import com.test.cryptoapp.domain.net.Api
 import com.test.cryptoapp.ui.activities.OnFragmentInteractionListener
+import com.test.cryptoapp.ui.factories.CoinDetailsFragmentViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 
@@ -37,9 +44,11 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     private var marketCapCoin: Float = 0.0F
     private var currentPriceCoin: Float = 0.0F
     private lateinit var idCoin: String
-    private lateinit var percentage: String
+    private var percentage: String = "24H"
     private lateinit var icon: String
-    private var days: String = ""
+    private var days: String = "1"
+    private lateinit var chart: LineChart
+
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -94,16 +103,80 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(idCoin)
         }
+
+        chart = binding.livechart
+        initChart()
+
+        //chart
         setupViewModel()
         showDataCoin(coin)
         setHasOptionsMenu(true)
+        coinFragmentViewModel.requestsForCoinDetails(idCoin, days, percentage)
         return binding.root
+    }
+
+    private fun initChart() {
+        chart.description.isEnabled = false
+
+        chart.setTouchEnabled(true)
+        chart.isDragEnabled = false
+        chart.setScaleEnabled(false)
+        chart.setDrawGridBackground(false)
+        chart.setDrawBorders(false)
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+
+        chart.axisLeft.setDrawGridLines(false)
+        chart.axisLeft.setDrawLabels(false)
+        chart.axisLeft.setDrawAxisLine(false)
+
+        chart.xAxis.setDrawGridLines(false)
+        chart.xAxis.setDrawLabels(false)
+        chart.xAxis.setDrawAxisLine(false)
+
+        chart.axisRight.setDrawGridLines(false)
+        chart.axisRight.setDrawLabels(false)
+        chart.axisRight.setDrawAxisLine(false)
+
+        chart.setBackgroundColor(Color.WHITE)
+    }
+
+    private fun drawChart(chartPoints: ChartPoints) {
+
+        val listEntry = ChartPointsToListEntryAdapter().convert(chartPoints)
+        val set1 = LineDataSet(listEntry, "chart")
+        set1.axisDependency = AxisDependency.LEFT
+        set1.color = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
+        set1.setDrawValues(false)
+
+
+        set1.valueTextColor = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
+
+        set1.lineWidth = 1.5f
+        set1.setDrawCircles(false)
+        set1.setDrawValues(false)
+        set1.fillAlpha = 0
+        set1.fillColor = ColorTemplate.getHoloBlue()
+        set1.highLightColor = Color.rgb(244, 117, 117)
+        set1.setDrawCircleHole(false)
+        set1.disableDashedHighlightLine()
+        set1.disableDashedLine()
+        set1.setDrawHighlightIndicators(false)
+        val data = LineData(set1)
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTextSize(9f)
+
+        chart.data = data
+        val min = listEntry.minByOrNull { entry -> entry.y }
+        val max = listEntry.maxByOrNull { entry -> entry.y }
+        binding.lowPrice.text = min!!.y.toString()
+        binding.highPrice.text = max!!.y.toString()
+        chart.invalidate()
     }
 
     override fun onStart() {
         super.onStart()
         activity?.actionBar?.title = idCoin
-        //activity?.actionBar?.setLogo(R.drawable.small_icon_crypto)
     }
 
     override fun onAttach(context: Context) {
@@ -134,16 +207,12 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         }
     }
 
-
     private fun showDataCoin(coin: Coin) {
-        binding.priceText.text = String.format("%.2f", coin.currentPriceCoin) + " $"
+        binding.priceText.text = String.format("%.2f$", coin.currentPriceCoin)
         binding.marketPricePercentage.text = coin.changePercentage + " %"
         binding.marketCap.text = "$ " + String.format("%.2f", coin.marketCap)
     }
 
-    private fun showDataChart(points: ChartPoints) {
-
-    }
 
     private fun setupViewModel() {
         coinFragmentViewModel =
@@ -161,13 +230,12 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
 
                         changeProgressBarVisibility(false)
                         showDataCoin(uiState.data.first)
-                        showDataChart(uiState.data.second)
+                        drawChart(uiState.data.second)
                     }
                     is UiState.Error -> {
                         showErrorMessage(uiState.error)
                         changeProgressBarVisibility(false)
                     }
-
                 }
             }
         }

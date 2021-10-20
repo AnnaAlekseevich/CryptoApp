@@ -59,7 +59,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/priceText" />
 
-    <com.tradingview.lightweightcharts.view.ChartsView
+
+
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/livechart"
         android:layout_width="match_parent"
         android:layout_height="132dp"

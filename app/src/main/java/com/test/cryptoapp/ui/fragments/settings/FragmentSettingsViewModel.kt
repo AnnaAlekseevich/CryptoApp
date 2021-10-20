@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.cryptoapp.db.DatabaseHelper
-import com.test.cryptoapp.net.models.User
+import com.test.cryptoapp.domain.db.DatabaseHelper
+import com.test.cryptoapp.domain.models.User
 import kotlinx.coroutines.launch
 
 class FragmentSettingsViewModel(private val dbHelper: DatabaseHelper) : ViewModel() {

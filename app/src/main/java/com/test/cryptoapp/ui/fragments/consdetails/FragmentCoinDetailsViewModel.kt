@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.models.ChartPoints
-import com.test.cryptoapp.net.models.Coin
-import com.test.cryptoapp.net.models.UiState
+import com.test.cryptoapp.domain.net.Api
+import com.test.cryptoapp.domain.models.ChartPoints
+import com.test.cryptoapp.domain.models.Coin
+import com.test.cryptoapp.domain.models.UiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -68,7 +68,6 @@ class FragmentCoinDetailsViewModel(
                 Log.d("PAIR", "init data ")
                 _myUiState.value = UiState.Success(Pair(c, a))
             }.collect { resp ->
-
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.test.cryptoapp.data
 
-import com.test.cryptoapp.net.Api
-import com.test.cryptoapp.net.models.ChartPoints
+import com.test.cryptoapp.domain.net.Api
+import com.test.cryptoapp.domain.models.ChartPoints
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response

@@ -1,9 +1,9 @@
-package com.test.cryptoapp.net.factories
+package com.test.cryptoapp.ui.factories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.test.cryptoapp.db.DatabaseHelper
-import com.test.cryptoapp.net.Api
+import com.test.cryptoapp.domain.db.DatabaseHelper
+import com.test.cryptoapp.domain.net.Api
 import com.test.cryptoapp.ui.fragments.splashScreen.FragmentSplashScreenViewModel
 
 class SplashScreenViewModelFactory(private val apiService: Api, private val dbHelper: DatabaseHelper) : ViewModelProvider.Factory {

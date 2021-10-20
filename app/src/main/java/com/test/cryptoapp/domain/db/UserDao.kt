@@ -1,7 +1,7 @@
-package com.test.cryptoapp.db
+package com.test.cryptoapp.domain.db
 
 import androidx.room.*
-import com.test.cryptoapp.net.models.User
+import com.test.cryptoapp.domain.models.User
 
 @Dao
 interface UserDao {

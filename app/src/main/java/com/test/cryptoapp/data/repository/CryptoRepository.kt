@@ -1,10 +1,6 @@
 package com.test.cryptoapp.data.repository
 
 import com.test.cryptoapp.data.DetailsCoinDataSource
-import com.test.cryptoapp.net.models.ChartPoints
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 class CryptoRepository(private val detailsCoinDataSource: DetailsCoinDataSource) {
 

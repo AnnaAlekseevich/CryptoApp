@@ -21,9 +21,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.test.cryptoapp.BuildConfig
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSettingsBinding
-import com.test.cryptoapp.db.DatabaseBuilder
-import com.test.cryptoapp.db.DatabaseHelperImpl
-import com.test.cryptoapp.net.factories.SettingFragmentViewModelFactory
+import com.test.cryptoapp.domain.db.DatabaseBuilder
+import com.test.cryptoapp.domain.db.DatabaseHelperImpl
+import com.test.cryptoapp.ui.factories.SettingFragmentViewModelFactory
 import pl.tajchert.nammu.Nammu
 import pl.tajchert.nammu.PermissionCallback
 import java.io.File
@@ -106,12 +106,12 @@ class FragmentSettings : Fragment() {
             resources.getString(R.string.popup_menu_take_a_picture),
             resources.getString(R.string.popup_menu_pick_from_gallery)
         )
-        builder.setItems(choosingImage) { dialog, which ->
+        builder.setItems(choosingImage) { _, which ->
             when (which) {
                 0 -> { /* camera */
                     openCameraForCreatingPhoto()
                 }
-                1 -> { /* gallery   */
+                1 -> { /* gallery */
                     onPictureClicked()
                 }
             }
