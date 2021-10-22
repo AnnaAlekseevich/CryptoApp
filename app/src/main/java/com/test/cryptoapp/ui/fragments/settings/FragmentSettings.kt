@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -14,16 +13,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.test.cryptoapp.BuildConfig
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSettingsBinding
-import com.test.cryptoapp.domain.db.DatabaseBuilder
-import com.test.cryptoapp.domain.db.DatabaseHelperImpl
-import com.test.cryptoapp.ui.factories.SettingFragmentViewModelFactory
+import com.test.cryptoapp.domain.models.UiState
+import com.test.cryptoapp.domain.models.User
+import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.tajchert.nammu.Nammu
 import pl.tajchert.nammu.PermissionCallback
 import java.io.File
@@ -32,12 +34,13 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-
 class FragmentSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
-    private lateinit var settingViewModel: FragmentSettingsViewModel
     private lateinit var itemSave: MenuItem
+    private lateinit var dateAsFormattedText: String
+
+    private val settingViewModel: FragmentSettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +52,9 @@ class FragmentSettings : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
-        setupViewModel()
 
         with(binding) {
             imageProfile.setOnClickListener {
-                Log.d("AddPhoto", "binding.imageProfile.setOnClickListener")
                 showPopupPhoto()
             }
             birthDay.setOnClickListener {
@@ -212,10 +213,8 @@ class FragmentSettings : Fragment() {
             Toast.makeText(context,"Cancel", Toast.LENGTH_SHORT).show()
         }
         picker.addOnPositiveButtonClickListener {
-
             val date = it //  single select date
             onDateSelected(date as Long)
-
         }
     }
 
@@ -228,7 +227,7 @@ class FragmentSettings : Fragment() {
         } else {
             TODO("VERSION.SDK_INT < O")
         }
-        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        dateAsFormattedText = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         settingViewModel.setDateOfBirth(dateAsFormattedText)
         binding.birthDay.setText(dateAsFormattedText)
     }
@@ -237,19 +236,15 @@ class FragmentSettings : Fragment() {
         when (item.itemId) {
             R.id.save -> {
                 settingViewModel.onSave()
+                settingViewModel.saveLiveData.observe(viewLifecycleOwner, {
+                    if (it == true) {
+                        showSnackbarMessage("SUCCESS")
+                    }
+                })
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setupViewModel() {
-        settingViewModel = ViewModelProviders.of(
-            this,
-            SettingFragmentViewModelFactory(
-                DatabaseHelperImpl(DatabaseBuilder.getInstance(requireContext()))
-            )
-        ).get(FragmentSettingsViewModel::class.java)
     }
 
     private val textWatcherFirstName = object : TextWatcher {
@@ -277,20 +272,38 @@ class FragmentSettings : Fragment() {
         }
     }
 
+    private fun changeProgressBarVisibility(show: Boolean) {
+        binding.progressBar.isVisible = show
+    }
+
     private fun setUserData() {
-        settingViewModel.isUserExistLiveData.observe(viewLifecycleOwner, {
-            if (it == true) {
-                val userData = settingViewModel.getUser()
-                with(binding) {
-                    setBigImage(userData.authorPhotoUrl?.toUri())
-                    FirstName.setText(userData.firstName, TextView.BufferType.EDITABLE)
-                    LastName.setText(userData.lastName, TextView.BufferType.EDITABLE)
-                    birthDay.setText(userData.dateOfBirth, TextView.BufferType.EDITABLE)
+        lifecycleScope.launchWhenStarted {
+            settingViewModel.myUiState.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> changeProgressBarVisibility(true)
+                    is UiState.Success<User> -> {
+                        changeProgressBarVisibility(false)
+                        with(binding) {
+                            setBigImage(uiState.data.authorPhotoUrl?.toUri())
+                            FirstName.setText(uiState.data.firstName, TextView.BufferType.EDITABLE)
+                            LastName.setText(uiState.data.lastName, TextView.BufferType.EDITABLE)
+                            birthDay.setText(uiState.data.dateOfBirth, TextView.BufferType.EDITABLE)
+                        }
+                    }
+                    is UiState.Error -> {
+                        showSnackbarMessage(uiState.error)
+                        changeProgressBarVisibility(false)
+                    }
                 }
             }
-        })
+        }
+    }
+
+    private fun showSnackbarMessage(message: String) {
+        view?.let {
+            val snack = Snackbar.make(it, message, Snackbar.LENGTH_LONG)
+            snack.show()
+        }
     }
 
 }
-
-

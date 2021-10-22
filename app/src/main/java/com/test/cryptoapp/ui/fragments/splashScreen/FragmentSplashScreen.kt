@@ -6,23 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSplashScreenBinding
-import com.test.cryptoapp.domain.db.DatabaseBuilder
-import com.test.cryptoapp.domain.db.DatabaseHelperImpl
-import com.test.cryptoapp.domain.net.Api
-import com.test.cryptoapp.ui.factories.SplashScreenViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentSplashScreen: Fragment() {
 
     private lateinit var binding: FragmentSplashScreenBinding
     private lateinit var rocketAnimation: AnimationDrawable
     private lateinit var navController: NavController
-    private lateinit var viewModel: FragmentSplashScreenViewModel
+    private val viewModelSplash : FragmentSplashScreenViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,13 +33,12 @@ class FragmentSplashScreen: Fragment() {
             rocketAnimation = background as AnimationDrawable
             rocketAnimation.start()
         }
-        setupViewModel()
         setupObserver()
         return binding.root
     }
 
     private fun setupObserver() {
-        viewModel.coinsLiveData.observe(viewLifecycleOwner, {
+        viewModelSplash.coinsLiveData.observe(viewLifecycleOwner, {
             if (it==true){
                 navController
                 .navigate(R.id.action_fragmentSplashScreen_to_fragmentCoinsList,
@@ -54,15 +49,6 @@ class FragmentSplashScreen: Fragment() {
                 )
             }
         })
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(
-                this,
-                SplashScreenViewModelFactory(Api.getApiService(),
-                    DatabaseHelperImpl(DatabaseBuilder.getInstance(requireContext()))
-                )
-            ).get(FragmentSplashScreenViewModel::class.java)
     }
 
 }

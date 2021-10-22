@@ -4,9 +4,13 @@ import com.test.cryptoapp.domain.models.Coin
 import com.test.cryptoapp.domain.models.User
 
 interface DatabaseHelper {
-    suspend fun getCoins(): List<Coin>
+    suspend fun getCoins(
+        pageNumber: Int?,
+        sortBy: String?,
+        perPage: Int
+    ): List<Coin>
 
-    suspend fun clearAll()
+    suspend fun deleteAll()
 
     suspend fun insertAll(coins: List<Coin>)
 

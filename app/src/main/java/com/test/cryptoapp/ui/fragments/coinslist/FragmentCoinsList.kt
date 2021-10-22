@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -13,16 +12,16 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentCoinsListBinding
-import com.test.cryptoapp.domain.net.Api
-import com.test.cryptoapp.ui.factories.MainFragmentViewModelFactory
 import com.test.cryptoapp.domain.models.Coin
 import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.ui.adapter.CoinsListAdapter
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     private lateinit var binding: FragmentCoinsListBinding
-    private lateinit var mainFragmentViewModel: FragmentCoinsListViewModel
+
+    private val mainFragmentViewModel: FragmentCoinsListViewModel by viewModel()
     private var coinsAdapter: CoinsListAdapter? = null
     private lateinit var navController: NavController
 
@@ -37,21 +36,26 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     ): View {
         binding = FragmentCoinsListBinding.inflate(layoutInflater)
         coinsAdapter = CoinsListAdapter(this)
-        setupViewModel()
         setupList()
-        setupView()
+
+        lifecycleScope.launchWhenCreated {
+            mainFragmentViewModel.listData.collectLatest { pagingData ->
+                coinsAdapter?.submitData(pagingData)
+            }
+        }
         coinsAdapter?.addLoadStateListener { loadStates ->
             binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
-            if(loadStates.refresh == LoadState.Loading){
+            if (loadStates.refresh == LoadState.Loading) {
                 changeProgressBarVisibility(true)
-            } else{
+            } else {
                 changeProgressBarVisibility(false)
             }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
+            mainFragmentViewModel.onDataRefreshed()
             coinsAdapter?.refresh()
         }
-        //setHasOptionsMenu(true)
+
         return binding.root
     }
 
@@ -97,28 +101,12 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun setupView() {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            mainFragmentViewModel.listData.collectLatest { pagingData ->
-                coinsAdapter?.submitData(pagingData)
-            }
-        }
-    }
-
     private fun setupList() {
         coinsAdapter = CoinsListAdapter(this)
         binding.cryptosRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = coinsAdapter
         }
-    }
-
-    private fun setupViewModel() {
-        mainFragmentViewModel =
-            ViewModelProvider(
-                this,
-                MainFragmentViewModelFactory(Api.getApiService())
-            )[FragmentCoinsListViewModel::class.java]
     }
 
     private fun showSortPopupMenu() {

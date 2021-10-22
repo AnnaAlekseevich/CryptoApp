@@ -19,6 +19,6 @@ interface CoinDao {
     suspend fun delete(coin: Coin)
 
     @Query("DELETE FROM coin")
-    suspend fun clearAll()
+    suspend fun deleteAll()
 
 }

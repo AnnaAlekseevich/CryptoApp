@@ -2,27 +2,43 @@ package com.test.cryptoapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.test.cryptoapp.data.repository.coins.CoinsRepository
 import com.test.cryptoapp.domain.models.Coin
-import com.test.cryptoapp.domain.net.Api
 
-class MyPositionalDataSource(private val apiService: Api, var sortingType: String) :
+class MyPositionalDataSource(
+    private val coinsRepository: CoinsRepository,
+    var sortingType: String,
+    var isFirst: Boolean
+) :
     PagingSource<Int, Coin>() {
 
     var sortBy: String = sortingType
     private var changePercentage: String = ""
     private var ids: String = ""
+    private var perPageNumber: Int = 20
+
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Coin> {
         try {
+            if (isFirst == true) {
+                perPageNumber = 20
+            } else perPageNumber = 250
+
             val currentLoadingPageKey = params.key ?: 1
             val response =
-                apiService.getCoins(currentLoadingPageKey, sortBy = sortBy, changePercentage = changePercentage,ids = ids, perPage = 250)
-            val pagedResponse = response.body()
-
+                coinsRepository.getCoins(
+                    currentLoadingPageKey,
+                    sortBy = sortBy,
+                    changePercentage = changePercentage,
+                    ids = ids,
+                    perPage = perPageNumber,
+                    isFirstLoad = isFirst
+                )
+            isFirst = false
             val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
 
             return LoadResult.Page(
-                data = pagedResponse ?: emptyList(),
+                data = response,
                 prevKey = prevKey,
                 nextKey = currentLoadingPageKey.plus(1)
             )

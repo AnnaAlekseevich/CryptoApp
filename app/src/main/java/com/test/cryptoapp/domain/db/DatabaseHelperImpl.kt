@@ -5,10 +5,12 @@ import com.test.cryptoapp.domain.models.User
 
 class DatabaseHelperImpl(private val appDatabase: AppDatabase) : DatabaseHelper {
 
-    override suspend fun getCoins(): List<Coin> = appDatabase.coinDao().getCoins()
+    override suspend fun getCoins(pageNumber: Int?, sortBy: String?, perPage: Int): List<Coin> {
+        return appDatabase.coinDao().getCoins()
+    }
 
-    override suspend fun clearAll() {
-        appDatabase.coinDao().clearAll()
+    override suspend fun deleteAll() {
+        appDatabase.coinDao().deleteAll()
     }
 
     override suspend fun insertAll(coins: List<Coin>) = appDatabase.coinDao().insertAll(coins)

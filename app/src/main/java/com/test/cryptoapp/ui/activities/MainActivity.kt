@@ -17,12 +17,14 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         bottomNavigationView = binding.btnNav
         setSupportActionBar(binding.toolbar)
         setContentView(binding.root)
+
     }
 
     override fun onStart() {
@@ -67,5 +69,6 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
         supportActionBar?.title = title
         binding.toolbar.setNavigationIcon(R.drawable.back_from_crypto_activity)
     }
+
 
 }
