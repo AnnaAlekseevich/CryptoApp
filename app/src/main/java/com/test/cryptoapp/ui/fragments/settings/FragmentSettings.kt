@@ -6,7 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,21 +66,35 @@ class FragmentSettings : Fragment() {
             FirstName.addTextChangedListener(textWatcherFirstName)
             LastName.addTextChangedListener(textWatcherLastName)
         }
-
+        binding.toolbar.inflateMenu(R.menu.settings_menu)
+        binding.toolbar.setTitle(R.string.settings_title)
+        itemSave = binding.toolbar.menu.findItem(R.id.save)
+        lifecycleScope.launchWhenStarted {
+            settingViewModel.savingEnabledDataState.collect { saving ->
+                if (saving) {
+                    itemSave.isEnabled = saving
+                }
+            }
+        }
+        binding.toolbar.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item?.itemId) {
+                R.id.save -> {
+                    settingViewModel.onSave()
+                    lifecycleScope.launchWhenStarted {
+                        settingViewModel.saveDataState.collect { save ->
+                            if (save) {
+                                showSnackbarMessage("SUCCESS")
+                            }
+                        }
+                    }
+                }
+            }
+            true
+        }
         setUserData()
         Nammu.init(requireContext())
         return binding.root
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_menu, menu)
-        itemSave = menu.findItem(R.id.save)
-        settingViewModel.savingEnabledLiveData.observe(viewLifecycleOwner, {
-            itemSave.isEnabled = it
-        })
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
 
     private fun onPictureClicked() {
         if (Nammu.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -232,20 +249,20 @@ class FragmentSettings : Fragment() {
         binding.birthDay.setText(dateAsFormattedText)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.save -> {
-                settingViewModel.onSave()
-                settingViewModel.saveLiveData.observe(viewLifecycleOwner, {
-                    if (it == true) {
-                        showSnackbarMessage("SUCCESS")
-                    }
-                })
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.save -> {
+//                settingViewModel.onSave()
+//                settingViewModel.saveLiveData.observe(viewLifecycleOwner, {
+//                    if (it == true) {
+//                        showSnackbarMessage("SUCCESS")
+//                    }
+//                })
+//                return true
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private val textWatcherFirstName = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {

@@ -1,4 +1,4 @@
-package com.test.cryptoapp.ui.activities
+package com.test.cryptoapp.ui.fragments.coinslist
 
 import android.view.View
 import com.test.cryptoapp.domain.models.Coin

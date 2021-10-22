@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="picker_dialog_title">12sp</dimen>
-    <dimen name="logo_height">24</dimen>
-    <dimen name="logo_width">24</dimen>
+    <dimen name="logo_height">24dp</dimen>
+    <dimen name="logo_width">24dp</dimen>
 
 </resources>

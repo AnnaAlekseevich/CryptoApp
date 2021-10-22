@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ItemListCryptoBinding
 import com.test.cryptoapp.domain.models.Coin
-import com.test.cryptoapp.ui.activities.CoinListItemClickListener
+import com.test.cryptoapp.ui.fragments.coinslist.CoinListItemClickListener
 
 class CoinsListAdapter(val coinListItemClickListener: CoinListItemClickListener) :
     PagingDataAdapter<Coin, CoinsListAdapter.CoinsViewHolder>(DataDifferntiator) {

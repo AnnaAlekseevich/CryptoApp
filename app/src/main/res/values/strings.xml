@@ -43,4 +43,7 @@
     <string name="market_cap">Market cap</string>
     <string name="market_cap_price">$999.99B</string>
     <string name="market_cap_price_percent">+999.99 %</string>
+    <string name="cryptocurrencies_title">Cryptocurrencies</string>
+    <string name="details_title">Crypto name</string>
+    <string name="settings_title">Settings</string>
 </resources>

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:titleTextColor="@color/white"
+        android:background="@color/UFO_green"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -26,11 +35,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="SOME TEXT"
+        android:gravity="center"
         app:layout_collapseMode="parallax"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toEndOf="parent"/>
 
     <TextView
@@ -38,10 +47,8 @@
         style="@style/CryptoActivityMarketPricePercent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/market_cap_price_percent"
         android:gravity="center"
         android:layout_marginTop="4dp"
-        android:layout_marginRight="17dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/priceText" />
@@ -51,7 +58,6 @@
         style="@style/CryptoActivityStartEndPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="80000$"
         android:gravity="end"
         android:layout_marginTop="20dp"
         android:layout_marginRight="16dp"
@@ -76,7 +82,6 @@
         style="@style/CryptoActivityStartEndPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="5000$"
         android:gravity="start"
         android:layout_marginTop="112dp"
         android:layout_marginLeft="30dp"
@@ -168,6 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineView">
@@ -176,8 +182,7 @@
             style="@style/CryptoActivityMarketCap"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="left"
+            android:layout_gravity="left"
             android:text="@string/market_cap" />
 
         <TextView
@@ -185,9 +190,7 @@
             style="@style/CryptoActivityMarketPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="@string/market_cap_price" />
+            android:layout_gravity="left"/>
 
     </LinearLayout>
 

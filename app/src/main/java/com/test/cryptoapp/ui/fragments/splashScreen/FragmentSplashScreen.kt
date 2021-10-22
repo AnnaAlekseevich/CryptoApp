@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentSplashScreenBinding
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentSplashScreen: Fragment() {
@@ -38,17 +40,22 @@ class FragmentSplashScreen: Fragment() {
     }
 
     private fun setupObserver() {
-        viewModelSplash.coinsLiveData.observe(viewLifecycleOwner, {
-            if (it==true){
-                navController
-                .navigate(R.id.action_fragmentSplashScreen_to_fragmentCoinsList,
-                    null,
-                    NavOptions.Builder()
-                        .setPopUpTo(R.id.fragmentSplashScreen,
-                            true).build()
-                )
+        lifecycleScope.launchWhenStarted {
+            viewModelSplash.myUiStateCoins.collect { coinsState ->
+                if (coinsState) {
+                    navController
+                        .navigate(
+                            R.id.action_fragmentSplashScreen_to_fragmentCoinsList,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(
+                                    R.id.fragmentSplashScreen,
+                                    true
+                                ).build()
+                        )
+                }
             }
-        })
+        }
     }
 
 }

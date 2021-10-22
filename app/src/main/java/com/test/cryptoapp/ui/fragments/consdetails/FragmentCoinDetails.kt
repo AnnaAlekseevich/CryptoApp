@@ -1,11 +1,11 @@
 package com.test.cryptoapp.ui.fragments.consdetails
 
-import android.app.Activity
-import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -13,8 +13,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionInflater
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.LineData
@@ -41,6 +44,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     private lateinit var idCoin: String
     private var percentage: String = "24H"
     private lateinit var icon: String
+    private lateinit var name: String
     private var days: String = "1"
     private lateinit var chart: LineChart
 
@@ -64,7 +68,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     ): View? {
 
         binding = FragmentCoinDelailsBinding.inflate(layoutInflater)
-
+        binding.toolbar.inflateMenu(R.menu.coindelails_menu)
         currentText = binding.day1
 
         binding.day1.setOnClickListener(this)
@@ -78,13 +82,22 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         percentage = arguments?.getString("percentage")!!
         currentPriceCoin = arguments?.getFloat("currentPrice")!!
         icon = arguments?.getString("icon")!!
+        name = arguments?.getString("name")!!
+        binding.toolbar.title = "  $name"
+        binding.toolbar.setNavigationIcon(R.drawable.back_from_details_fragment)
+        setLogo()
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigate(
+                R.id.action_fragmentCoinDetails_to_fragmentCoinsList
+            )
+        }
         var coin = Coin(
             cryptoId = idCoin,
             currentPriceCoin = currentPriceCoin.toDouble(),
-            cryptoName = "",
-            cryptoSymbol = "",
-            urlItemCrypto = "",
+            cryptoName = null,
+            cryptoSymbol = null,
+            urlItemCrypto = null,
             changePercentage = percentage,
             marketCap = marketCapCoin.toDouble()
         )
@@ -164,39 +177,6 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         chart.invalidate()
     }
 
-    override fun onStart() {
-        super.onStart()
-        activity?.actionBar?.title = idCoin
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val activity: Activity?
-        if (context is Activity) {
-            activity = context
-            mListener = try {
-                activity as OnFragmentInteractionListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement OnFragmentInteractionListener")
-            }
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                //onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun showDataCoin(coin: Coin) {
         binding.priceText.text = String.format("%.2f$", coin.currentPriceCoin)
         binding.marketPricePercentage.text = coin.changePercentage + " %"
@@ -204,7 +184,6 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     }
 
     private fun setupViewModel() {
-
         lifecycleScope.launchWhenStarted {
             coinFragmentViewModel.myUiState.collect { uiState ->
                 when (uiState) {
@@ -274,6 +253,45 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
 
     private fun changeProgressBarVisibility(show: Boolean) {
         binding.progressBar.isVisible = show
+    }
+
+    private fun setLogo() {
+        Glide.with(binding.toolbar.context)
+            .asBitmap()
+            .load(icon)
+            //.override(R.dimen.logo_width, R.dimen.logo_height)
+            .into(object : SimpleTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                ) {
+                    var resourceChangedSize = getResizedBitmap(
+                        resource,
+                        resources.getDimension(R.dimen.logo_width).toInt(),
+                        resources.getDimension(R.dimen.logo_height).toInt()
+                    )
+                    val drawable = BitmapDrawable(resources, resourceChangedSize)
+                    binding.toolbar.logo = drawable
+                }
+
+            })
+    }
+
+    fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int): Bitmap? {
+        val width = bm.width
+        val height = bm.height
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+        // CREATE A MATRIX FOR THE MANIPULATION
+        val matrix = Matrix()
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight)
+        // "RECREATE" THE NEW BITMAP
+        val resizedBitmap = Bitmap.createBitmap(
+            bm, 0, 0, width, height, matrix, false
+        )
+        bm.recycle()
+        return resizedBitmap
     }
 
 }

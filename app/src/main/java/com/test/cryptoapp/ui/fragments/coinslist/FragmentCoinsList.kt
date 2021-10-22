@@ -1,7 +1,10 @@
 package com.test.cryptoapp.ui.fragments.coinslist
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.FragmentCoinsListBinding
 import com.test.cryptoapp.domain.models.Coin
-import com.test.cryptoapp.ui.activities.CoinListItemClickListener
 import com.test.cryptoapp.ui.adapter.CoinsListAdapter
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,6 +37,16 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCoinsListBinding.inflate(layoutInflater)
+        binding.toolbar.inflateMenu(R.menu.coinslist_menu)
+        binding.toolbar.setOnMenuItemClickListener {item: MenuItem? ->
+            when (item?.itemId) {
+                R.id.sort -> {
+                    showSortPopupMenu()
+                }
+            }
+            true
+        }
+        binding.toolbar.setTitle(R.string.cryptocurrencies_title)
         coinsAdapter = CoinsListAdapter(this)
         setupList()
 
@@ -64,11 +76,6 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         navController = findNavController()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.coinslist_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onCoinClicked(coin: Coin?, priceText: View) {
         if (coin != null) {
             var id = coin?.cryptoId
@@ -76,13 +83,15 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
             val currentPrice = coin?.currentPriceCoin
             val percentage = coin?.changePercentage
             val icon = coin?.urlItemCrypto
-            val bundle: Bundle = Bundle(5)
+            val name = coin?.cryptoName
+            val bundle: Bundle = Bundle(6)
                 .apply {
                     putString("id", id)
                     putFloat("marketCap", marketCap.toFloat())
                     putFloat("currentPrice", currentPrice.toFloat())
                     putString("percentage", percentage)
                     putString("icon", icon)
+                    putString("name", name)
                 }
             priceText.transitionName = "priceText"
             val perfectText = FragmentNavigatorExtras(
@@ -128,22 +137,13 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         // add OK and Cancel buttons
         builder.setPositiveButton("OK") { dialog, which ->
             mainFragmentViewModel.sortBy(currentSort)
+            mainFragmentViewModel.onDataRefreshed()
             coinsAdapter?.refresh()
         }
         builder.setNegativeButton("Cancel", null)
         // create and show the alert dialog
         val dialog = builder.create()
         dialog.show()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
-            R.id.sort -> {
-                showSortPopupMenu()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
 }

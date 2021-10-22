@@ -1,7 +1,6 @@
 package com.test.cryptoapp.ui.fragments.settings
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.cryptoapp.data.repository.user.UserRepository
@@ -13,8 +12,13 @@ import kotlinx.coroutines.launch
 
 class FragmentSettingsViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    val savingEnabledLiveData = MutableLiveData(false)
-    val saveLiveData = MutableLiveData(false)
+    private val _savingEnabledDataState = MutableStateFlow(false)
+    val savingEnabledDataState: StateFlow<Boolean>
+        get() = _savingEnabledDataState
+    private val _saveDataState = MutableStateFlow(false)
+    val saveDataState: StateFlow<Boolean>
+        get() = _saveDataState
+
     private val _myUiState = MutableStateFlow<UiState<User>>(UiState.Loading)
     val myUiState: StateFlow<UiState<User>>
         get() = _myUiState
@@ -32,7 +36,7 @@ class FragmentSettingsViewModel(private val userRepository: UserRepository) : Vi
                 var user = userRepository.getUser()
 
                 if (user != null) {
-                    savingEnabledLiveData.value = true
+                    _savingEnabledDataState.value = true
                 } else {
                     user = createUser()
                     userRepository.updateUser(user)
@@ -81,7 +85,7 @@ class FragmentSettingsViewModel(private val userRepository: UserRepository) : Vi
         viewModelScope.launch {
             runCatching {
                 userRepository.updateUser(createUser())
-                saveLiveData.value = true
+                _saveDataState.value = true
             }.onFailure {
                 Log.d("ROOMUSER", "onFailure onSave()")
             }
@@ -90,9 +94,9 @@ class FragmentSettingsViewModel(private val userRepository: UserRepository) : Vi
 
     private fun updateSaveButtonState() {
         if (firstNameUser?.isNotEmpty() == true && lastNameUser?.isNotEmpty() == true && dateOfBirthUser?.isNotEmpty() == true && urlPhotoUser?.isNotEmpty() == true) {
-            savingEnabledLiveData.value = true
+            _savingEnabledDataState.value = true
         } else if (firstNameUser?.isNullOrEmpty() == true || lastNameUser?.isNullOrEmpty() == true || dateOfBirthUser?.isNullOrEmpty() == true || urlPhotoUser?.isNullOrEmpty() == true) {
-            savingEnabledLiveData.value = false
+            _savingEnabledDataState.value = false
         }
     }
 }

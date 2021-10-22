@@ -6,14 +6,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -22,7 +21,6 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         bottomNavigationView = binding.btnNav
-        setSupportActionBar(binding.toolbar)
         setContentView(binding.root)
 
     }
@@ -30,10 +28,6 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
     override fun onStart() {
         super.onStart()
         navController = findNavController(this, R.id.nav_host_fragment)
-
-        val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.fragmentCoinsList, R.id.settingsFragment))
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         setUpTabs()
         hideToolbarBottomNavigationSplashScreen()
     }
@@ -54,21 +48,13 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id.equals(R.id.fragmentSplashScreen)){
                 bottomNavigationView.visibility = View.GONE
-                binding.toolbar.visibility = View.GONE
             } else if (destination.id.equals(R.id.fragmentCoinDetails)){
                 bottomNavigationView.visibility = View.GONE
             }
             else {
                 bottomNavigationView.visibility = View.VISIBLE
-                binding.toolbar.visibility = View.VISIBLE
             }
         }
     }
-
-    override fun onFragmentInteraction(title: String?) {
-        supportActionBar?.title = title
-        binding.toolbar.setNavigationIcon(R.drawable.back_from_crypto_activity)
-    }
-
 
 }

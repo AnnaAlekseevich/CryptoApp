@@ -65,5 +65,8 @@
         <argument
             android:name="perfectText"
             app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentCoinDetails_to_fragmentCoinsList"
+            app:destination="@id/fragmentCoinsList" />
     </fragment>
 </navigation>
