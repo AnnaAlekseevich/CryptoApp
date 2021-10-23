@@ -1,6 +1,6 @@
 package com.test.cryptoapp.ui.fragments.splashScreen
 
-import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FragmentSplashScreen: Fragment() {
 
     private lateinit var binding: FragmentSplashScreenBinding
-    private lateinit var rocketAnimation: AnimationDrawable
+    private lateinit var rocketAnimation: AnimatedVectorDrawable
     private lateinit var navController: NavController
     private val viewModelSplash : FragmentSplashScreenViewModel by viewModel()
 
@@ -30,9 +30,9 @@ class FragmentSplashScreen: Fragment() {
         binding = FragmentSplashScreenBinding.inflate(layoutInflater)
 
         navController = NavHostFragment.findNavController(this)
-        binding.splashImage.apply {
-            setBackgroundResource(R.drawable.progress_bar)
-            rocketAnimation = background as AnimationDrawable
+        binding.splashImageAnim.apply {
+            setBackgroundResource(R.drawable.anim_progress_bar)
+            rocketAnimation = background as AnimatedVectorDrawable
             rocketAnimation.start()
         }
         setupObserver()
