@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
+        //TODO !REFACTORING! Better to initialize all needed parameters in onCreate()
         super.onStart()
         navController = findNavController(this, R.id.nav_host_fragment)
         setUpTabs()
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hideToolbarBottomNavigationSplashScreen(){
+        //TODO !REFACTORING! Try to use when(...) { ... } here
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id.equals(R.id.fragmentSplashScreen)){
                 bottomNavigationView.visibility = View.GONE

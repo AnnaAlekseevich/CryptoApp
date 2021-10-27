@@ -241,14 +241,14 @@ class FragmentSettings : Fragment() {
                 Instant.ofEpochMilli(dateTimeStampInMillis),
                 ZoneId.systemDefault()
             )
-        } else {
+        } else { //TODO !REFACTORING! Complete TODO
             TODO("VERSION.SDK_INT < O")
         }
         dateAsFormattedText = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         settingViewModel.setDateOfBirth(dateAsFormattedText)
         binding.birthDay.setText(dateAsFormattedText)
     }
-
+    //TODO !REFACTORING! Remove all unnecessary code
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        when (item.itemId) {
 //            R.id.save -> {

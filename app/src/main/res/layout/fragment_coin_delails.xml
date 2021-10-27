@@ -114,7 +114,7 @@
             android:textColor="@color/white"
             android:background="@drawable/background_time_chart"
             style="@style/CryptoActivityPointsTime"/>
-
+        <!-- TODO !REFACTORING! Change to layout_marginStart -->
         <TextView
             android:id="@+id/days7"
             android:layout_width="45dp"

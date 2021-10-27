@@ -78,6 +78,7 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
 
     override fun onCoinClicked(coin: Coin?, priceText: View) {
         if (coin != null) {
+            //TODO !REFACTORING! Need to check all IDE hints like var -> val, ?, etc.
             var id = coin?.cryptoId
             val marketCap = coin?.marketCap
             val currentPrice = coin?.currentPriceCoin
@@ -135,6 +136,7 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
             }
         }
         // add OK and Cancel buttons
+        //TODO !REFACTORING! Move text to strings.xml
         builder.setPositiveButton("OK") { dialog, which ->
             mainFragmentViewModel.sortBy(currentSort)
             mainFragmentViewModel.onDataRefreshed()

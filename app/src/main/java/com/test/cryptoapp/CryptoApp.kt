@@ -58,7 +58,11 @@ class CryptoApp : Application() {
 
 }
 
-
+//TODO !REFACTORING! Better to use one module in separate class for all viewModels, repositories, api etc. For example:
+// val splashScreenViewModel = module {
+//    viewModel { FragmentSplashScreenViewModel(get()) }
+//    viewModel { FragmentSettingsViewModel(get()) }
+// }
 val splashScreenViewModel = module {
     viewModel {
         FragmentSplashScreenViewModel(get())

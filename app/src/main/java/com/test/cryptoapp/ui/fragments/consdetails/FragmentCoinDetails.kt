@@ -70,7 +70,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         binding = FragmentCoinDelailsBinding.inflate(layoutInflater)
         binding.toolbar.inflateMenu(R.menu.coindelails_menu)
         currentText = binding.day1
-
+        //TODO !REFACTORING! Better to use construction with(binding) { ... } on all screens
         binding.day1.setOnClickListener(this)
         binding.days7.setOnClickListener(this)
         binding.days30.setOnClickListener(this)
@@ -121,6 +121,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
     }
 
     private fun initChart() {
+        //TODO !REFACTORING! Better to use construction with(...) { ... } on all screens
         chart.description.isEnabled = false
 
         chart.setTouchEnabled(true)
