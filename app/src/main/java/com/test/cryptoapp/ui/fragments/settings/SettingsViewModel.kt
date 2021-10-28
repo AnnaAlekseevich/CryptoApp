@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FragmentSettingsViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SettingsViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     private val _savingEnabledDataState = MutableStateFlow(false)
     val savingEnabledDataState: StateFlow<Boolean>
@@ -38,6 +38,7 @@ class FragmentSettingsViewModel(private val userRepository: UserRepository) : Vi
                 if (user != null) {
                     _savingEnabledDataState.value = true
                 } else {
+                    _savingEnabledDataState.value = false
                     user = createUser()
                     userRepository.updateUser(user)
                 }
@@ -93,9 +94,9 @@ class FragmentSettingsViewModel(private val userRepository: UserRepository) : Vi
     }
 
     private fun updateSaveButtonState() {
-        if (firstNameUser?.isNotEmpty() == true && lastNameUser?.isNotEmpty() == true && dateOfBirthUser?.isNotEmpty() == true && urlPhotoUser?.isNotEmpty() == true) {
+        if (firstNameUser?.isNotEmpty() == true && lastNameUser?.isNotEmpty() == true) {
             _savingEnabledDataState.value = true
-        } else if (firstNameUser?.isNullOrEmpty() == true || lastNameUser?.isNullOrEmpty() == true || dateOfBirthUser?.isNullOrEmpty() == true || urlPhotoUser?.isNullOrEmpty() == true) {
+        } else if (firstNameUser?.isNullOrEmpty() == true || lastNameUser?.isNullOrEmpty() == true) {
             _savingEnabledDataState.value = false
         }
     }

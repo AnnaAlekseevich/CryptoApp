@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-//TODO !REFACTORING! All Viewmodel classes should be named like SplashScreenViewModel without word "Fragment"
-class FragmentSplashScreenViewModel(private val coinsRepository: CoinsRepository) :
+class SplashScreenViewModel(private val coinsRepository: CoinsRepository) :
     ViewModel() {
     private val _myUiStateSplash = MutableStateFlow(false)
     val myUiStateCoins: StateFlow<Boolean>

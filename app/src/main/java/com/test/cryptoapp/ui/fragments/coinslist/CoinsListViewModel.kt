@@ -8,7 +8,7 @@ import androidx.paging.cachedIn
 import com.test.cryptoapp.data.MyPositionalDataSource
 import com.test.cryptoapp.data.repository.coins.CoinsRepository
 
-class FragmentCoinsListViewModel(private val coinsRepository: CoinsRepository) : ViewModel() {
+class CoinsListViewModel(private val coinsRepository: CoinsRepository) : ViewModel() {
 
     var sortingType: String = "market_cap_desc"
     var isFirst = true

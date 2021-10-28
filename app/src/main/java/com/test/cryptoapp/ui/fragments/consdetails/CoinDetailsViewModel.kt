@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class FragmentCoinDetailsViewModel(
+class CoinDetailsViewModel(
     private val coinRepository: CoinsRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -38,7 +38,7 @@ class FragmentCoinDetailsViewModel(
                     ids = id,
                     changePercentage = daysChoosePercentage,
                     sortBy = "",
-                    perPage = 250,
+                    perPage = 20,
                     isFirstLoad = false
                 )
             latestDetailsChangePercentage[0]

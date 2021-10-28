@@ -2,7 +2,6 @@ package com.test.cryptoapp.ui.fragments.settings
 
 import android.Manifest
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,10 +31,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.tajchert.nammu.Nammu
 import pl.tajchert.nammu.PermissionCallback
 import java.io.File
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FragmentSettings : Fragment() {
 
@@ -43,7 +40,7 @@ class FragmentSettings : Fragment() {
     private lateinit var itemSave: MenuItem
     private lateinit var dateAsFormattedText: String
 
-    private val settingViewModel: FragmentSettingsViewModel by viewModel()
+    private val settingViewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,9 +68,7 @@ class FragmentSettings : Fragment() {
         itemSave = binding.toolbar.menu.findItem(R.id.save)
         lifecycleScope.launchWhenStarted {
             settingViewModel.savingEnabledDataState.collect { saving ->
-                if (saving) {
-                    itemSave.isEnabled = saving
-                }
+                itemSave.isEnabled = saving
             }
         }
         binding.toolbar.setOnMenuItemClickListener { item: MenuItem? ->
@@ -149,10 +144,10 @@ class FragmentSettings : Fragment() {
             }
         }
 
-    private fun setBigImage(pictureUri: Uri?) {
+    private fun setBigImage(pictureUri: Uri) {
         pictureUri?.let {
             Glide
-                .with(binding.imageProfile.context)
+                .with(requireContext())
                 .load(it)
                 .into(binding.imageProfile)
         }
@@ -236,33 +231,12 @@ class FragmentSettings : Fragment() {
     }
 
     private fun onDateSelected(dateTimeStampInMillis: Long) {
-        val dateTime: LocalDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(dateTimeStampInMillis),
-                ZoneId.systemDefault()
-            )
-        } else { //TODO !REFACTORING! Complete TODO
-            TODO("VERSION.SDK_INT < O")
-        }
-        dateAsFormattedText = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        val dateTime = Date(dateTimeStampInMillis)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        dateAsFormattedText = dateFormat.format(dateTime)
         settingViewModel.setDateOfBirth(dateAsFormattedText)
         binding.birthDay.setText(dateAsFormattedText)
     }
-    //TODO !REFACTORING! Remove all unnecessary code
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.save -> {
-//                settingViewModel.onSave()
-//                settingViewModel.saveLiveData.observe(viewLifecycleOwner, {
-//                    if (it == true) {
-//                        showSnackbarMessage("SUCCESS")
-//                    }
-//                })
-//                return true
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private val textWatcherFirstName = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -301,7 +275,9 @@ class FragmentSettings : Fragment() {
                     is UiState.Success<User> -> {
                         changeProgressBarVisibility(false)
                         with(binding) {
-                            setBigImage(uiState.data.authorPhotoUrl?.toUri())
+                            if (!uiState.data.authorPhotoUrl.isNullOrEmpty()) {
+                                setBigImage(uiState.data.authorPhotoUrl.toUri())
+                            }
                             FirstName.setText(uiState.data.firstName, TextView.BufferType.EDITABLE)
                             LastName.setText(uiState.data.lastName, TextView.BufferType.EDITABLE)
                             birthDay.setText(uiState.data.dateOfBirth, TextView.BufferType.EDITABLE)

@@ -16,11 +16,10 @@ class CoinsRepositoryImpl(
         ids: String?,
         isFirstLoad: Boolean
     ): List<Coin> {
-        //TODO !REFACTORING! Use ternary conditional operator here
-        if (isFirstLoad && pageNumber == 1) {
-            return localCoinsDataStore.getCoins(pageNumber, sortBy, perPage)
+        return if (isFirstLoad && pageNumber == 1) {
+            localCoinsDataStore.getCoins(pageNumber, sortBy, perPage)
         } else {
-            return remoteCoinsDataStore.getCoins(
+            remoteCoinsDataStore.getCoins(
                 pageNumber,
                 sortBy,
                 perPage,

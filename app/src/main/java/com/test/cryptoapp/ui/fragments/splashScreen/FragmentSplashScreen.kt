@@ -20,7 +20,7 @@ class FragmentSplashScreen: Fragment() {
     private lateinit var binding: FragmentSplashScreenBinding
     private lateinit var rocketAnimation: AnimatedVectorDrawable
     private lateinit var navController: NavController
-    private val viewModelSplash : FragmentSplashScreenViewModel by viewModel()
+    private val viewModelSplash : SplashScreenViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

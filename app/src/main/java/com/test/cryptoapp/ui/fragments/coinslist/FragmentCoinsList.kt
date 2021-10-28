@@ -23,9 +23,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     private lateinit var binding: FragmentCoinsListBinding
 
-    private val mainFragmentViewModel: FragmentCoinsListViewModel by viewModel()
+    private val mainFragmentViewModel: CoinsListViewModel by viewModel()
     private var coinsAdapter: CoinsListAdapter? = null
     private lateinit var navController: NavController
+    //private var refreshUser: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +58,6 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
         }
         coinsAdapter?.addLoadStateListener { loadStates ->
             binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
-            if (loadStates.refresh == LoadState.Loading) {
-                changeProgressBarVisibility(true)
-            } else {
-                changeProgressBarVisibility(false)
-            }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
             mainFragmentViewModel.onDataRefreshed()
@@ -77,14 +73,14 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
     }
 
     override fun onCoinClicked(coin: Coin?, priceText: View) {
-        if (coin != null) {
-            //TODO !REFACTORING! Need to check all IDE hints like var -> val, ?, etc.
-            var id = coin?.cryptoId
-            val marketCap = coin?.marketCap
-            val currentPrice = coin?.currentPriceCoin
-            val percentage = coin?.changePercentage
-            val icon = coin?.urlItemCrypto
-            val name = coin?.cryptoName
+
+        coin?.let {
+            val id = it.cryptoId
+            val marketCap = it.marketCap
+            val currentPrice = it.currentPriceCoin
+            val percentage = it.changePercentage
+            val icon = it.urlItemCrypto
+            val name = it.cryptoName
             val bundle: Bundle = Bundle(6)
                 .apply {
                     putString("id", id)
@@ -104,11 +100,9 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
                 null,
                 perfectText
             )
-        }
-    }
 
-    private fun changeProgressBarVisibility(show: Boolean) {
-        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        }
+
     }
 
     private fun setupList() {
@@ -136,13 +130,12 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
             }
         }
         // add OK and Cancel buttons
-        //TODO !REFACTORING! Move text to strings.xml
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
             mainFragmentViewModel.sortBy(currentSort)
             mainFragmentViewModel.onDataRefreshed()
             coinsAdapter?.refresh()
         }
-        builder.setNegativeButton("Cancel", null)
+        builder.setNegativeButton(resources.getString(R.string.cancel), null)
         // create and show the alert dialog
         val dialog = builder.create()
         dialog.show()

@@ -12,10 +12,10 @@ import com.test.cryptoapp.domain.db.AppDatabase
 import com.test.cryptoapp.domain.db.DatabaseHelper
 import com.test.cryptoapp.domain.db.DatabaseHelperImpl
 import com.test.cryptoapp.domain.net.Api
-import com.test.cryptoapp.ui.fragments.coinslist.FragmentCoinsListViewModel
-import com.test.cryptoapp.ui.fragments.consdetails.FragmentCoinDetailsViewModel
-import com.test.cryptoapp.ui.fragments.settings.FragmentSettingsViewModel
-import com.test.cryptoapp.ui.fragments.splashScreen.FragmentSplashScreenViewModel
+import com.test.cryptoapp.ui.fragments.coinslist.CoinsListViewModel
+import com.test.cryptoapp.ui.fragments.consdetails.CoinDetailsViewModel
+import com.test.cryptoapp.ui.fragments.settings.SettingsViewModel
+import com.test.cryptoapp.ui.fragments.splashScreen.SplashScreenViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -38,53 +38,32 @@ class CryptoApp : Application() {
             androidLogger(org.koin.core.logger.Level.DEBUG)
             modules(
                 listOf(
-                    splashScreenViewModel,
-                    settingsViewModel,
-                    coinsListViewModel,
-                    coinsDetailsViewModel,
-                    storeUserModule,
-                    storeRemoteCoinModule,
-                    repositoryUserModule,
+                    viewModels,
+                    storesModule,
                     apiModule,
                     databaseModule,
-                    storeLocalCoinModule,
-                    repositoryCoinModule,
-                    databaseHelperModule,
+                    repositoriesCoinModule,
                     coroutineDispatcherModule
                 )
             )
         }
     }
-
 }
 
-//TODO !REFACTORING! Better to use one module in separate class for all viewModels, repositories, api etc. For example:
-// val splashScreenViewModel = module {
-//    viewModel { FragmentSplashScreenViewModel(get()) }
-//    viewModel { FragmentSettingsViewModel(get()) }
-// }
-val splashScreenViewModel = module {
+val viewModels = module {
     viewModel {
-        FragmentSplashScreenViewModel(get())
+        SplashScreenViewModel(get())
     }
-}
+    viewModel {
+        SettingsViewModel(get())
+    }
+    viewModel {
+        CoinsListViewModel(get())
+    }
+    viewModel {
+        CoinDetailsViewModel(get(), get())
+    }
 
-val settingsViewModel = module {
-    viewModel {
-        FragmentSettingsViewModel(get())
-    }
-}
-
-val coinsListViewModel = module {
-    viewModel {
-        FragmentCoinsListViewModel(get())
-    }
-}
-
-val coinsDetailsViewModel = module {
-    viewModel {
-        FragmentCoinDetailsViewModel(get(), get())
-    }
 }
 
 val apiModule = module {
@@ -118,60 +97,43 @@ val databaseModule = module {
             .allowMainThreadQueries()
             .build()
     }
-
-    single { provideDatabase(androidApplication()) }
-}
-
-val databaseHelperModule = module {
     fun provideHelperDatabase(appDatabase: AppDatabase): DatabaseHelper {
         return DatabaseHelperImpl(appDatabase)
     }
 
     single { provideHelperDatabase(get()) }
+    single { provideDatabase(androidApplication()) }
 }
 
-val storeUserModule = module {
+val storesModule = module {
     fun provideUserDataStore(dbHelper: DatabaseHelper): UserDataStore {
         return UserDataStoreImpl(dbHelper)
     }
-
-    single { provideUserDataStore(get()) }
-}
-
-val storeRemoteCoinModule = module {
-
     fun provideRemoteCoinDataStore(api: Api): RemoteCoinsDataStore {
         return RemoteCoinsDataStoreImpl(api)
     }
-
-    single { provideRemoteCoinDataStore(get()) }
-}
-
-val storeLocalCoinModule = module {
-    fun provideUserDataStore(dbHelper: DatabaseHelper): LocalCoinsDataStore {
+    fun provideLocalDataStore(dbHelper: DatabaseHelper): LocalCoinsDataStore {
         return LocalCoinsDataStoreImpl(dbHelper)
     }
 
     single { provideUserDataStore(get()) }
+    single { provideRemoteCoinDataStore(get()) }
+    single { provideLocalDataStore(get()) }
 }
 
-val repositoryCoinModule = module {
+val repositoriesCoinModule = module {
     fun provideCoinRepository(
         localCoinsDataStore: LocalCoinsDataStore,
         remoteCoinsDataStore: RemoteCoinsDataStore
     ): CoinsRepository {
         return CoinsRepositoryImpl(localCoinsDataStore, remoteCoinsDataStore)
     }
-
-    single { provideCoinRepository(get(), get()) }
-}
-
-val repositoryUserModule = module {
     fun provideUserRepository(userDataStore: UserDataStore): UserRepository {
         return UserRepositoryImpl(userDataStore)
     }
 
     single { provideUserRepository(get()) }
+    single { provideCoinRepository(get(), get()) }
 }
 
 val coroutineDispatcherModule = module {

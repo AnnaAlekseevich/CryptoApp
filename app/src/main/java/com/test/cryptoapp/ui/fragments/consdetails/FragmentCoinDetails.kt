@@ -37,7 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FragmentCoinDetails : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentCoinDelailsBinding
-    private val coinFragmentViewModel: FragmentCoinDetailsViewModel by viewModel()
+    private val coinViewModel: CoinDetailsViewModel by viewModel()
     private lateinit var currentText: TextView
     private var marketCapCoin: Float = 0.0F
     private var currentPriceCoin: Float = 0.0F
@@ -66,32 +66,33 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentCoinDelailsBinding.inflate(layoutInflater)
-        binding.toolbar.inflateMenu(R.menu.coindelails_menu)
-        currentText = binding.day1
-        //TODO !REFACTORING! Better to use construction with(binding) { ... } on all screens
-        binding.day1.setOnClickListener(this)
-        binding.days7.setOnClickListener(this)
-        binding.days30.setOnClickListener(this)
-        binding.days365.setOnClickListener(this)
-        binding.all.setOnClickListener(this)
-
         idCoin = arguments?.getString("id")!!
         marketCapCoin = arguments?.getFloat("marketCap")!!
         percentage = arguments?.getString("percentage")!!
         currentPriceCoin = arguments?.getFloat("currentPrice")!!
         icon = arguments?.getString("icon")!!
         name = arguments?.getString("name")!!
-        binding.toolbar.title = "  $name"
-        binding.toolbar.setNavigationIcon(R.drawable.back_from_details_fragment)
+        with(binding){
+            toolbar.inflateMenu(R.menu.coindelails_menu)
+            day1.setOnClickListener(this@FragmentCoinDetails)
+            days7.setOnClickListener(this@FragmentCoinDetails)
+            days30.setOnClickListener(this@FragmentCoinDetails)
+            days365.setOnClickListener(this@FragmentCoinDetails)
+            all.setOnClickListener(this@FragmentCoinDetails)
+            toolbar.title = "  $name"
+            toolbar.setNavigationIcon(R.drawable.back_from_details_fragment)
+            toolbar.setNavigationOnClickListener {
+                findNavController().navigate(
+                    R.id.action_fragmentCoinDetails_to_fragmentCoinsList
+                )
+            }
+        }
+
+        currentText = binding.day1
+
         setLogo()
 
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigate(
-                R.id.action_fragmentCoinDetails_to_fragmentCoinsList
-            )
-        }
         var coin = Coin(
             cryptoId = idCoin,
             currentPriceCoin = currentPriceCoin.toDouble(),
@@ -116,77 +117,87 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
         setupViewModel()
         showDataCoin(coin)
         setHasOptionsMenu(true)
-        coinFragmentViewModel.requestsForCoinDetails(idCoin, days, percentage)
+        coinViewModel.requestsForCoinDetails(idCoin, days, percentage)
         return binding.root
     }
 
     private fun initChart() {
-        //TODO !REFACTORING! Better to use construction with(...) { ... } on all screens
-        chart.description.isEnabled = false
+        with(chart) {
+            description.isEnabled = false
 
-        chart.setTouchEnabled(true)
-        chart.isDragEnabled = false
-        chart.setScaleEnabled(false)
-        chart.setDrawGridBackground(false)
-        chart.setDrawBorders(false)
-        chart.description.isEnabled = false
-        chart.legend.isEnabled = false
+            setTouchEnabled(true)
+            isDragEnabled = false
+            setScaleEnabled(false)
+            setDrawGridBackground(false)
+            setDrawBorders(false)
+            description.isEnabled = false
+            legend.isEnabled = false
 
-        chart.axisLeft.setDrawGridLines(false)
-        chart.axisLeft.setDrawLabels(false)
-        chart.axisLeft.setDrawAxisLine(false)
+            axisLeft.setDrawGridLines(false)
+            axisLeft.setDrawLabels(false)
+            axisLeft.setDrawAxisLine(false)
 
-        chart.xAxis.setDrawGridLines(false)
-        chart.xAxis.setDrawLabels(false)
-        chart.xAxis.setDrawAxisLine(false)
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawLabels(false)
+            xAxis.setDrawAxisLine(false)
 
-        chart.axisRight.setDrawGridLines(false)
-        chart.axisRight.setDrawLabels(false)
-        chart.axisRight.setDrawAxisLine(false)
+            axisRight.setDrawGridLines(false)
+            axisRight.setDrawLabels(false)
+            axisRight.setDrawAxisLine(false)
 
-        chart.setBackgroundColor(Color.WHITE)
+            setBackgroundColor(Color.WHITE)
+        }
     }
 
     private fun drawChart(chartPoints: ChartPoints) {
 
         val listEntry = ChartPointsToListEntryAdapter().convert(chartPoints)
         val set1 = LineDataSet(listEntry, "chart")
+        with(set1) {
+            axisDependency = AxisDependency.LEFT
+            color = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
+            setDrawValues(false)
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
+            lineWidth = 1.5f
+            setDrawCircles(false)
+            setDrawValues(false)
+            fillAlpha = 0
+            fillColor = ColorTemplate.getHoloBlue()
+            highLightColor = Color.rgb(244, 117, 117)
+            setDrawCircleHole(false)
+            disableDashedHighlightLine()
+            disableDashedLine()
+            setDrawHighlightIndicators(false)
+        }
 
-        set1.axisDependency = AxisDependency.LEFT
-        set1.color = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
-        set1.setDrawValues(false)
-        set1.valueTextColor = ContextCompat.getColor(requireContext(), R.color.deep_saffron)
-        set1.lineWidth = 1.5f
-        set1.setDrawCircles(false)
-        set1.setDrawValues(false)
-        set1.fillAlpha = 0
-        set1.fillColor = ColorTemplate.getHoloBlue()
-        set1.highLightColor = Color.rgb(244, 117, 117)
-        set1.setDrawCircleHole(false)
-        set1.disableDashedHighlightLine()
-        set1.disableDashedLine()
-        set1.setDrawHighlightIndicators(false)
         val data = LineData(set1)
-        data.setValueTextColor(Color.WHITE)
-        data.setValueTextSize(9f)
+        with(data) {
+            setValueTextColor(Color.WHITE)
+            setValueTextSize(9f)
+        }
 
         chart.data = data
         val min = listEntry.minByOrNull { entry -> entry.y }
         val max = listEntry.maxByOrNull { entry -> entry.y }
-        binding.lowPrice.text = min!!.y.toString()
-        binding.highPrice.text = max!!.y.toString()
+        with(binding) {
+            lowPrice.text = min!!.y.toString()
+            highPrice.text = max!!.y.toString()
+        }
+
         chart.invalidate()
     }
 
     private fun showDataCoin(coin: Coin) {
-        binding.priceText.text = String.format("%.2f$", coin.currentPriceCoin)
-        binding.marketPricePercentage.text = coin.changePercentage + " %"
-        binding.marketCap.text = "$ " + String.format("%.2f", coin.marketCap)
+        with(binding){
+            priceText.text = String.format("%.2f$", coin.currentPriceCoin)
+            marketPricePercentage.text = coin.changePercentage + " %"
+            marketCap.text = "$ " + String.format("%.2f", coin.marketCap)
+        }
     }
 
     private fun setupViewModel() {
         lifecycleScope.launchWhenStarted {
-            coinFragmentViewModel.myUiState.collect { uiState ->
+            coinViewModel.myUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> changeProgressBarVisibility(true)
                     is UiState.Success<Pair<Coin, ChartPoints>> -> {
@@ -233,15 +244,18 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
             else -> days
         }
         (newTextView as? TextView)?.let { changeTextView(currentText, it) }
-        coinFragmentViewModel.requestsForCoinDetails(idCoin, days, percentage)
+        coinViewModel.requestsForCoinDetails(idCoin, days, percentage)
     }
 
     private fun changeTextView(currentTextView: TextView, newText: TextView) {
-        currentTextView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-        currentTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.silver_sand))
-        newText.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.background_time_chart)
-        newText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        with(currentTextView){
+            setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.silver_sand))
+        }
+        with(newText){
+            background = ContextCompat.getDrawable(requireContext(), R.drawable.background_time_chart)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        }
         currentText = newText
     }
 

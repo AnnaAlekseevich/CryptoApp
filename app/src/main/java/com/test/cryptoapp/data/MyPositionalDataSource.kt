@@ -20,10 +20,6 @@ class MyPositionalDataSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Coin> {
         try {
-            if (isFirst == true) {
-                perPageNumber = 20
-            } else perPageNumber = 250
-
             val currentLoadingPageKey = params.key ?: 1
             val response =
                 coinsRepository.getCoins(

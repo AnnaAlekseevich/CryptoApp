@@ -4,5 +4,33 @@
     <dimen name="picker_dialog_title">12sp</dimen>
     <dimen name="logo_height">24dp</dimen>
     <dimen name="logo_width">24dp</dimen>
+    <dimen name="layout_45dp">45dp</dimen>
+    <dimen name="layout_27dp">27dp</dimen>
+    <dimen name="layout_31dp">31dp</dimen>
+    <dimen name="layout_32dp">32dp</dimen>
+    <dimen name="layout_75dp">75dp</dimen>
+    <dimen name="layout_24dp">24dp</dimen>
+    <dimen name="layout_16dp">16dp</dimen>
+    <dimen name="layout_112dp">112dp</dimen>
+    <dimen name="layout_4dp">4dp</dimen>
+    <dimen name="layout_20dp">20dp</dimen>
+    <dimen name="layout_132dp">132dp</dimen>
+    <dimen name="layout_40dp">40dp</dimen>
+    <dimen name="layout_30dp">30dp</dimen>
+    <dimen name="layout_1dp">1dp</dimen>
+    <dimen name="layout_66dp">66dp</dimen>
+    <dimen name="layout_56dp">56dp</dimen>
+    <dimen name="layout_48dp">48dp</dimen>
+    <dimen name="layout_12dp">12dp</dimen>
+
+    <dimen name="text_size_12sp">12sp</dimen>
+    <dimen name="text_size_13sp">13sp</dimen>
+    <dimen name="text_size_14sp">14sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_18sp">18sp</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
+    <dimen name="text_size_28sp">28sp</dimen>
+    <dimen name="text_size_36sp">36sp</dimen>
 
 </resources>

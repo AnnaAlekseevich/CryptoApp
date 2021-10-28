@@ -14,11 +14,11 @@
         app:titleTextColor="@color/white"
         android:background="@color/UFO_green"
         app:layout_constraintTop_toTopOf="parent" />
-    <!-- TODO !REFACTORING! Need to use dimens.xml for all sizes like 75dp -->
+
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="@dimen/layout_75dp"
+        android:layout_height="@dimen/layout_75dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:backgroundTint="@color/white"
@@ -32,7 +32,7 @@
         android:id="@+id/constraintSettings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
+        android:padding="@dimen/layout_16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         <FrameLayout
             android:id="@+id/personRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="@dimen/layout_66dp"
             android:layout_gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/imageProfile"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
             <View
                 android:id="@+id/addPhoto"
                 android:layout_width="match_parent"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/layout_66dp"
                 android:layout_gravity="bottom|center"
                 android:background="@color/gray_background_color" />
 
@@ -75,14 +75,14 @@
             android:id="@+id/FirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_24dp"
             android:background="@drawable/frame_for_frofile_data"
             android:gravity="center_vertical"
             android:hint="@string/first_name"
             android:maxLength="20"
-            android:minHeight="56dp"
+            android:minHeight="@dimen/layout_56dp"
             android:minLines="1"
-            android:padding="16dp"
+            android:padding="@dimen/layout_16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/personRelativeLayout" />
@@ -92,12 +92,12 @@
             android:id="@+id/LastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_24dp"
             android:background="@drawable/frame_for_frofile_data"
             android:gravity="center_vertical"
             android:hint="@string/last_name"
-            android:minHeight="56dp"
-            android:padding="16dp"
+            android:minHeight="@dimen/layout_56dp"
+            android:padding="@dimen/layout_16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/FirstName" />
@@ -107,13 +107,13 @@
             android:id="@+id/birthDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_24dp"
             android:background="@drawable/frame_for_frofile_data"
             android:focusable="false"
             android:gravity="center_vertical"
             android:hint="@string/date_of_birth"
-            android:minHeight="56dp"
-            android:padding="16dp"
+            android:minHeight="@dimen/layout_56dp"
+            android:padding="@dimen/layout_16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LastName" />

@@ -11,6 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.test.cryptoapp.R
 import com.test.cryptoapp.databinding.ActivityMainBinding
+import com.test.cryptoapp.domain.models.ChartPoints
+import com.test.cryptoapp.domain.models.Coin
+import com.test.cryptoapp.domain.models.UiState
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -46,15 +49,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hideToolbarBottomNavigationSplashScreen(){
-        //TODO !REFACTORING! Try to use when(...) { ... } here
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id.equals(R.id.fragmentSplashScreen)){
-                bottomNavigationView.visibility = View.GONE
-            } else if (destination.id.equals(R.id.fragmentCoinDetails)){
-                bottomNavigationView.visibility = View.GONE
-            }
-            else {
-                bottomNavigationView.visibility = View.VISIBLE
+            when (destination.id) {
+                R.id.fragmentSplashScreen -> {
+                    bottomNavigationView.visibility = View.GONE
+                }
+                R.id.fragmentCoinDetails -> {
+                    bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                }
             }
         }
     }
