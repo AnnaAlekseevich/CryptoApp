@@ -7,12 +7,12 @@ import com.test.cryptoapp.domain.models.User
 interface UserDao {
 
     @Query("SELECT * FROM user")
-    suspend fun getUser(): User
+    fun getUser(): User
 
     @Insert
-    suspend fun insertUser(user: User)
+    fun insertUser(user: User)
 
     @Update(entity = User::class)
-    suspend fun updateUser(user: User)
+    fun updateUser(user: User)
 
 }

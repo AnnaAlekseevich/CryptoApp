@@ -10,15 +10,15 @@ import com.test.cryptoapp.domain.models.Coin
 interface CoinDao {
 
     @Query("SELECT * FROM coin")
-    suspend fun getCoins(): List<Coin>
+    fun getCoins(): List<Coin>
 
     @Insert
-    suspend fun insertAll(coins: List<Coin>)
+    fun insertAll(coins: List<Coin>)
 
     @Delete
-    suspend fun delete(coin: Coin)
+    fun delete(coin: Coin)
 
     @Query("DELETE FROM coin")
-    suspend fun deleteAll()
+    fun deleteAll()
 
 }

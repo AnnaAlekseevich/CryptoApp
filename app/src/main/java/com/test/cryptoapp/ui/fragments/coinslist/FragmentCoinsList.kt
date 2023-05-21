@@ -78,12 +78,12 @@ class FragmentCoinsList : Fragment(), CoinListItemClickListener {
 
     override fun onCoinClicked(coin: Coin?, priceText: View) {
         if (coin != null) {
-            var id = coin?.cryptoId
-            val marketCap = coin?.marketCap
-            val currentPrice = coin?.currentPriceCoin
-            val percentage = coin?.changePercentage
-            val icon = coin?.urlItemCrypto
-            val name = coin?.cryptoName
+            var id = coin.cryptoId
+            val marketCap = coin.marketCap
+            val currentPrice = coin.currentPriceCoin
+            val percentage = coin.changePercentage
+            val icon = coin.urlItemCrypto
+            val name = coin.cryptoName
             val bundle: Bundle = Bundle(6)
                 .apply {
                     putString("id", id)

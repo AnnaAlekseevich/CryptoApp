@@ -58,7 +58,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
             duration = 15000
         }
         sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            context?.let { TransitionInflater.from(it).inflateTransition(android.R.transition.move) }
     }
 
     override fun onCreateView(
@@ -106,7 +106,7 @@ class FragmentCoinDetails : Fragment(), View.OnClickListener {
             duration = 750
         }
         sharedElementEnterTransition =
-            TransitionInflater.from(this.context).inflateTransition(android.R.transition.move)
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
         if (mListener != null) {
             mListener!!.onFragmentInteraction(idCoin)
         }
